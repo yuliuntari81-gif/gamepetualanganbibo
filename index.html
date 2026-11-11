@@ -1,0 +1,2219 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Petualangan Bibo: Bank Sampah & Matematika Kelas 5 SD</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --font-title: 'Fredoka', sans-serif;
+            --font-body: 'Nunito', sans-serif;
+        }
+        body {
+            font-family: var(--font-body);
+            overflow-x: hidden;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        h1, h2, h3, .font-fredoka {
+            font-family: var(--font-title);
+        }
+
+        /* Animasi Awan Berarak */
+        @keyframes drift {
+            from { transform: translateX(-150px); }
+            to { transform: translateX(100vw); }
+        }
+        .cloud-1 { animation: drift 38s linear infinite; }
+        .cloud-2 { animation: drift 52s linear infinite 12s; }
+        .cloud-3 { animation: drift 45s linear infinite 25s; }
+
+        /* Animasi Maskot Bibo Melayang & Kepakan Sayap */
+        @keyframes floatBibo {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-14px) rotate(1.5deg); }
+        }
+        .bibo-float {
+            animation: floatBibo 3.2s ease-in-out infinite;
+        }
+
+        @keyframes wingLeft {
+            0%, 100% { transform: rotate(0deg) scaleX(1); }
+            50% { transform: rotate(-18deg) scaleX(0.92); }
+        }
+        @keyframes wingRight {
+            0%, 100% { transform: rotate(0deg) scaleX(1); }
+            50% { transform: rotate(18deg) scaleX(0.92); }
+        }
+        .wing-l {
+            transform-origin: 115px 150px;
+            animation: wingLeft 0.16s ease-in-out infinite;
+        }
+        .wing-r {
+            transform-origin: 185px 150px;
+            animation: wingRight 0.16s ease-in-out infinite;
+        }
+
+        /* Animasi Tutup Botol Terbuka & Percikan Air */
+        @keyframes tumblerMove0 {
+            0%, 100% { transform: translate(0px, 0px) rotate(-2deg); }
+            25% { transform: translate(6px, -12px) rotate(2deg); }
+            50% { transform: translate(-5px, -6px) rotate(-3deg); }
+            75% { transform: translate(5px, -14px) rotate(3deg); }
+        }
+        @keyframes tumblerMove1 {
+            0%, 100% { transform: translate(0px, -10px) rotate(2deg); }
+            25% { transform: translate(-6px, 0px) rotate(-2deg); }
+            50% { transform: translate(6px, -14px) rotate(3deg); }
+            75% { transform: translate(-4px, -5px) rotate(-2deg); }
+        }
+        @keyframes tumblerMove2 {
+            0%, 100% { transform: translate(0px, -5px) rotate(-3deg); }
+            25% { transform: translate(7px, -15px) rotate(2deg); }
+            50% { transform: translate(-6px, 0px) rotate(-2deg); }
+            75% { transform: translate(4px, -10px) rotate(2deg); }
+        }
+        @keyframes tumblerMove3 {
+            0%, 100% { transform: translate(0px, -12px) rotate(3deg); }
+            25% { transform: translate(-7px, -3px) rotate(-3deg); }
+            50% { transform: translate(5px, -15px) rotate(2deg); }
+            75% { transform: translate(-5px, 0px) rotate(-2deg); }
+        }
+        .tumbler-floating-0 { animation: tumblerMove0 3.6s ease-in-out infinite; }
+        .tumbler-floating-1 { animation: tumblerMove1 4.0s ease-in-out infinite; }
+        .tumbler-floating-2 { animation: tumblerMove2 3.4s ease-in-out infinite; }
+        .tumbler-floating-3 { animation: tumblerMove3 3.8s ease-in-out infinite; }
+
+        .tumbler-card {
+            transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.2s;
+        }
+        .tumbler-card:hover, .tumbler-card.motion-hover {
+            animation-play-state: paused;
+            transform: translateY(-14px) scale(1.06) !important;
+            filter: drop-shadow(0 15px 20px rgba(0, 0, 0, 0.22));
+        }
+        .tumbler-cap {
+            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transform-origin: center bottom;
+        }
+        .tumbler-card.cap-open .tumbler-cap {
+            transform: translateY(-32px) rotate(-25deg);
+        }
+        @keyframes splashAnim {
+            0% { opacity: 1; transform: translateY(0) scale(0.5); }
+            100% { opacity: 0; transform: translateY(-45px) scale(1.4); }
+        }
+        .water-splash {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .tumbler-card.cap-open .water-splash {
+            animation: splashAnim 0.6s ease-out forwards;
+        }
+
+        /* Indikator Sensor Gerak melingkar */
+        .motion-ring {
+            transition: stroke-dashoffset 0.1s linear;
+        }
+
+        /* Scrollbar kustom untuk modal */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #10b981; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-gradient-to-b from-sky-400 via-sky-200 to-emerald-200 min-h-screen relative flex flex-col justify-between overflow-x-hidden text-slate-800">
+
+    <!-- ==================== LATAR BELAKANG ALAM & SEKOLAH BERSIH ==================== -->
+    <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <!-- Sarang Lebah Madu (Honeycomb) di Sudut Atas -->
+        <svg class="absolute -top-6 -left-6 w-44 h-44 md:w-64 md:h-64 opacity-85 drop-shadow-md" viewBox="0 0 200 200">
+            <defs>
+                <linearGradient id="honeyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#fbbf24"/>
+                    <stop offset="100%" stop-color="#d97706"/>
+                </linearGradient>
+            </defs>
+            <g fill="url(#honeyGrad)" stroke="#fef3c7" stroke-width="3">
+                <polygon points="40,20 70,20 85,45 70,70 40,70 25,45"/>
+                <polygon points="85,45 115,45 130,70 115,95 85,95 70,70"/>
+                <polygon points="40,70 70,70 85,95 70,120 40,120 25,95"/>
+                <polygon points="130,20 160,20 175,45 160,70 130,70 115,45"/>
+                <polygon points="85,-5 115,-5 130,20 115,45 85,45 70,20"/>
+                <polygon points="-5,45 25,45 40,70 25,95 -5,95 -20,70"/>
+                <polygon points="40,120 70,120 85,145 70,170 40,170 25,145"/>
+            </g>
+            <!-- Tetesan Madu -->
+            <path d="M70,170 Q70,190 80,190 Q90,190 90,170 Z" fill="#f59e0b"/>
+            <circle cx="80" cy="196" r="5" fill="#f59e0b"/>
+        </svg>
+
+        <!-- Sarang Lebah Kanan Atas -->
+        <svg class="absolute -top-8 -right-8 w-40 h-40 md:w-56 md:h-56 opacity-80 drop-shadow-md transform scale-x-[-1]" viewBox="0 0 200 200">
+            <g fill="url(#honeyGrad)" stroke="#fef3c7" stroke-width="3">
+                <polygon points="40,20 70,20 85,45 70,70 40,70 25,45"/>
+                <polygon points="85,45 115,45 130,70 115,95 85,95 70,70"/>
+                <polygon points="40,70 70,70 85,95 70,120 40,120 25,95"/>
+                <polygon points="85,-5 115,-5 130,20 115,45 85,45 70,20"/>
+            </g>
+        </svg>
+
+        <!-- Awan Putih Berarak -->
+        <div class="cloud-1 absolute top-14 left-0 opacity-90">
+            <svg width="160" height="80" viewBox="0 0 160 80" fill="white">
+                <circle cx="50" cy="45" r="28"/><circle cx="85" cy="35" r="32"/><circle cx="120" cy="48" r="24"/>
+                <rect x="45" y="45" width="80" height="28" rx="14"/>
+            </svg>
+        </div>
+        <div class="cloud-2 absolute top-28 left-0 opacity-75 scale-75">
+            <svg width="160" height="80" viewBox="0 0 160 80" fill="white">
+                <circle cx="50" cy="45" r="28"/><circle cx="85" cy="35" r="32"/><circle cx="120" cy="48" r="24"/>
+                <rect x="45" y="45" width="80" height="28" rx="14"/>
+            </svg>
+        </div>
+        <div class="cloud-3 absolute top-10 left-0 opacity-80 scale-90">
+            <svg width="160" height="80" viewBox="0 0 160 80" fill="white">
+                <circle cx="50" cy="45" r="28"/><circle cx="85" cy="35" r="32"/><circle cx="120" cy="48" r="24"/>
+                <rect x="45" y="45" width="80" height="28" rx="14"/>
+            </svg>
+        </div>
+
+        <!-- Perbukitan Rumput Hijau Berlapis & Bunga Taman -->
+        <svg class="absolute bottom-0 left-0 w-full h-44 md:h-64" viewBox="0 0 1440 320" preserveAspectRatio="none">
+            <path fill="#34d399" fill-opacity="0.7" d="M0,192L80,186.7C160,181,320,171,480,181.3C640,192,800,224,960,218.7C1120,213,1280,171,1360,149.3L1440,128L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path>
+            <path fill="#10b981" d="M0,240L60,234.7C120,229,240,219,360,224C480,229,600,251,720,250.7C840,251,960,229,1080,218.7C1200,208,1320,208,1380,208L1440,208L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path>
+            <path fill="#059669" d="M0,288L120,277.3C240,267,480,245,720,256C960,267,1200,309,1320,320L1440,330L1440,320L0,320Z"></path>
+        </svg>
+
+        <!-- Bunga-bunga Taman Warna-Warni -->
+        <div class="absolute bottom-3 left-8 flex space-x-12 opacity-90">
+            <span class="text-2xl md:text-3xl animate-bounce" style="animation-duration: 3s;">🌻</span>
+            <span class="text-xl md:text-2xl animate-bounce" style="animation-duration: 2.4s;">🌷</span>
+            <span class="text-2xl md:text-3xl animate-bounce" style="animation-duration: 3.5s;">🌼</span>
+        </div>
+        <div class="absolute bottom-3 right-10 flex space-x-12 opacity-90">
+            <span class="text-2xl md:text-3xl animate-bounce" style="animation-duration: 2.8s;">🌺</span>
+            <span class="text-2xl md:text-3xl animate-bounce" style="animation-duration: 3.2s;">🌻</span>
+            <span class="text-xl md:text-2xl animate-bounce" style="animation-duration: 2.5s;">🌼</span>
+        </div>
+    </div>
+
+    <!-- ==================== TEMPLATES SVG (LOGO & MASKOT BIBO) ==================== -->
+    <template id="svg-bibo-template">
+        <svg viewBox="0 0 300 320" class="w-full h-full bibo-float drop-shadow-xl">
+            <!-- Sayap Kiri & Kanan (Animasi Kepakan) -->
+            <g class="wing-l">
+                <ellipse cx="75" cy="145" rx="52" ry="34" fill="#e0f2fe" fill-opacity="0.88" stroke="#7dd3fc" stroke-width="3" transform="rotate(-18 75 145)"/>
+                <path d="M50,135 Q75,145 105,150" stroke="#bae6fd" stroke-width="2" fill="none"/>
+            </g>
+            <g class="wing-r">
+                <ellipse cx="225" cy="145" rx="52" ry="34" fill="#e0f2fe" fill-opacity="0.88" stroke="#7dd3fc" stroke-width="3" transform="rotate(18 225 145)"/>
+                <path d="M250,135 Q225,145 195,150" stroke="#bae6fd" stroke-width="2" fill="none"/>
+            </g>
+
+            <!-- Kaki Bibo -->
+            <path d="M128,265 Q122,292 108,296" stroke="#1e293b" stroke-width="9" stroke-linecap="round" fill="none"/>
+            <ellipse cx="103" cy="298" rx="18" ry="8" fill="#0f172a" transform="rotate(-10 103 298)"/>
+            <path d="M172,265 Q178,292 192,296" stroke="#1e293b" stroke-width="9" stroke-linecap="round" fill="none"/>
+            <ellipse cx="197" cy="298" rx="18" ry="8" fill="#0f172a" transform="rotate(10 197 298)"/>
+
+            <!-- Sengat Kecil -->
+            <polygon points="143,268 157,268 150,284" fill="#0f172a"/>
+
+            <!-- Tubuh Lebah Berbelang Kuning-Hitam -->
+            <defs>
+                <clipPath id="bodyClip">
+                    <ellipse cx="150" cy="198" rx="68" ry="74"/>
+                </clipPath>
+                <radialGradient id="faceGrad" cx="50%" cy="40%" r="55%">
+                    <stop offset="0%" stop-color="#fde047"/>
+                    <stop offset="100%" stop-color="#eab308"/>
+                </radialGradient>
+            </defs>
+            <g clip-path="url(#bodyClip)">
+                <rect x="70" y="120" width="160" height="160" fill="#facc15"/>
+                <path d="M70,175 Q150,192 230,175 L230,204 Q150,221 70,204 Z" fill="#1e293b"/>
+                <path d="M70,225 Q150,242 230,225 L230,252 Q150,269 70,252 Z" fill="#1e293b"/>
+            </g>
+            <ellipse cx="150" cy="198" rx="68" ry="74" fill="none" stroke="#ca8a04" stroke-width="3"/>
+
+            <!-- Selempang Hijau "BIBO" -->
+            <g>
+                <path d="M90,152 L212,226 L195,252 L75,178 Z" fill="#16a34a" stroke="#15803d" stroke-width="3" stroke-linejoin="round"/>
+                <text x="144" y="208" font-family="Fredoka, sans-serif" font-weight="700" font-size="23" fill="#ffffff" letter-spacing="3" text-anchor="middle" transform="rotate(31 144 202)">BIBO</text>
+            </g>
+
+            <!-- Lencana Sekolah SD Negeri 2 Tremes di Dada Kanan Bibo -->
+            <g transform="translate(172, 162) scale(0.75)">
+                <polygon points="20,0 38,12 32,34 8,34 2,12" fill="#ef4444" stroke="#ffffff" stroke-width="2"/>
+                <circle cx="20" cy="18" r="12" fill="#38bdf8"/>
+                <polygon points="20,4 22,9 27,9 23,12 24,17 20,14 16,17 17,12 13,9 18,9" fill="#fde047"/>
+                <rect x="12" y="18" width="16" height="8" rx="2" fill="#fde047"/>
+            </g>
+
+            <!-- Tangan Kiri Bibo (Tolak Pinggang) -->
+            <path d="M214,185 Q242,190 218,216" stroke="#1e293b" stroke-width="9" stroke-linecap="round" fill="none"/>
+            <circle cx="215" cy="217" r="8" fill="#0f172a"/>
+
+            <!-- Kepala & Wajah Ceria Bibo -->
+            <circle cx="150" cy="108" r="58" fill="url(#faceGrad)" stroke="#ca8a04" stroke-width="3"/>
+
+            <!-- Antena Lebah -->
+            <path d="M126,54 Q112,25 90,32" stroke="#1e293b" stroke-width="5" stroke-linecap="round" fill="none"/>
+            <circle cx="88" cy="32" r="8" fill="#0f172a"/>
+            <path d="M174,54 Q188,25 210,32" stroke="#1e293b" stroke-width="5" stroke-linecap="round" fill="none"/>
+            <circle cx="212" cy="32" r="8" fill="#0f172a"/>
+
+            <!-- Mata Besar Ramah Anak -->
+            <ellipse cx="126" cy="100" rx="15" ry="18" fill="#ffffff" stroke="#1e293b" stroke-width="2.5"/>
+            <ellipse cx="128" cy="102" rx="10" ry="12" fill="#1e293b"/>
+            <circle cx="124" cy="96" r="4" fill="#ffffff"/>
+            <circle cx="132" cy="106" r="2" fill="#ffffff"/>
+            <!-- Bulu Mata Kiri -->
+            <path d="M111,88 L105,82 M116,84 L112,77" stroke="#1e293b" stroke-width="2.5" stroke-linecap="round"/>
+
+            <ellipse cx="174" cy="100" rx="15" ry="18" fill="#ffffff" stroke="#1e293b" stroke-width="2.5"/>
+            <ellipse cx="172" cy="102" rx="10" ry="12" fill="#1e293b"/>
+            <circle cx="168" cy="96" r="4" fill="#ffffff"/>
+            <circle cx="176" cy="106" r="2" fill="#ffffff"/>
+            <!-- Bulu Mata Kanan -->
+            <path d="M189,88 L195,82 M184,84 L188,77" stroke="#1e293b" stroke-width="2.5" stroke-linecap="round"/>
+
+            <!-- Pipi Merona & Hidung -->
+            <ellipse cx="102" cy="118" rx="10" ry="6" fill="#fb7185" fill-opacity="0.55"/>
+            <ellipse cx="198" cy="118" rx="10" ry="6" fill="#fb7185" fill-opacity="0.55"/>
+            <ellipse cx="150" cy="112" rx="7" ry="4.5" fill="#ca8a04"/>
+
+            <!-- Senyum Lebar Ceria -->
+            <path d="M120,124 Q150,142 180,124 Q175,154 150,154 Q125,154 120,124 Z" fill="#991b1b" stroke="#7f1d1d" stroke-width="2"/>
+            <path d="M132,140 Q150,132 168,140 Q162,152 150,152 Q138,152 132,140 Z" fill="#fb7185"/>
+            <path d="M123,125 Q150,135 177,125 L174,131 Q150,140 126,131 Z" fill="#ffffff"/>
+
+            <!-- Tangan Kanan Bibo Memegang Botol Tumbler Sendiri (G-Plast Free) -->
+            <path d="M88,188 Q62,195 45,172" stroke="#1e293b" stroke-width="9" stroke-linecap="round" fill="none"/>
+            <!-- Botol Tumbler di Tangan Bibo -->
+            <g transform="translate(16, 108) rotate(-8)">
+                <!-- Tutup Hitam -->
+                <rect x="11" y="0" width="18" height="10" rx="3" fill="#1e293b"/>
+                <!-- Leher Botol -->
+                <path d="M8,10 L32,10 L36,22 L4,22 Z" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5"/>
+                <!-- Badan Tumbler -->
+                <rect x="4" y="22" width="32" height="62" rx="8" fill="#f8fafc" stroke="#94a3b8" stroke-width="2"/>
+                <!-- Sabuk Hijau Eco -->
+                <rect x="4" y="42" width="32" height="24" fill="#22c55e"/>
+                <text x="20" y="57" font-family="Fredoka, sans-serif" font-size="8" font-weight="bold" fill="#ffffff" text-anchor="middle">ECO</text>
+                <!-- Kilau Botol -->
+                <line x1="10" y1="26" x2="10" y2="78" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+                <!-- Jari Tangan Bibo Memegang Botol -->
+                <rect x="-2" y="42" width="16" height="8" rx="4" fill="#0f172a"/>
+                <rect x="-3" y="50" width="18" height="8" rx="4" fill="#0f172a"/>
+                <rect x="-1" y="58" width="15" height="8" rx="4" fill="#0f172a"/>
+            </g>
+        </svg>
+    </template>
+
+    <!-- ==================== OVERLAY KAMERA SENSOR GERAKAN TANGAN (WEBCAM) ==================== -->
+    <div id="motion-hud" class="fixed bottom-4 right-4 z-50 hidden flex-col items-end">
+        <div class="bg-slate-900/90 border-4 border-emerald-400 rounded-2xl p-2 shadow-2xl backdrop-blur-md w-44 md:w-56">
+            <div class="flex items-center justify-between mb-1 px-1">
+                <span class="text-xs font-bold text-emerald-300 flex items-center gap-1">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+                    Sensor Tangan Aktif
+                </span>
+                <button onclick="toggleMotionSensor(false)" class="text-xs bg-rose-500 hover:bg-rose-600 text-white px-2 py-0.5 rounded-lg font-bold" title="Matikan Kamera">✕</button>
+            </div>
+            <!-- Area Video + Indikator Zona Botol A, B, C, D -->
+            <div class="relative w-full h-28 md:h-36 bg-black rounded-xl overflow-hidden border border-slate-700">
+                <video id="webcam-video" autoplay playsinline muted class="w-full h-full object-cover transform scale-x-[-1]"></video>
+                <canvas id="motion-canvas" width="160" height="120" class="absolute inset-0 w-full h-full pointer-events-none opacity-65"></canvas>
+                <!-- 4 Zona Sensor di Atas Kamera -->
+                <div class="absolute inset-0 grid grid-cols-4 gap-0.5 p-1 pointer-events-none">
+                    <div id="zone-overlay-0" class="border border-emerald-400/60 rounded bg-emerald-500/10 flex flex-col items-center justify-start pt-1">
+                        <span class="text-[10px] font-extrabold bg-emerald-600 text-white px-1.5 rounded">A</span>
+                    </div>
+                    <div id="zone-overlay-1" class="border border-amber-400/60 rounded bg-amber-500/10 flex flex-col items-center justify-start pt-1">
+                        <span class="text-[10px] font-extrabold bg-amber-500 text-white px-1.5 rounded">B</span>
+                    </div>
+                    <div id="zone-overlay-2" class="border border-sky-400/60 rounded bg-sky-500/10 flex flex-col items-center justify-start pt-1">
+                        <span class="text-[10px] font-extrabold bg-sky-500 text-white px-1.5 rounded">C</span>
+                    </div>
+                    <div id="zone-overlay-3" class="border border-orange-400/60 rounded bg-orange-500/10 flex flex-col items-center justify-start pt-1">
+                        <span class="text-[10px] font-extrabold bg-orange-500 text-white px-1.5 rounded">D</span>
+                    </div>
+                </div>
+            </div>
+            <p class="text-[10px] text-slate-300 text-center mt-1 leading-tight">Lambaikan tangan pada kolom <b>A / B / C / D</b> untuk memilih botol!</p>
+        </div>
+    </div>
+
+    <!-- ==================== 1. HALAMAN PEMBUKA / SPLASH SCREEN ==================== -->
+    <section id="screen-splash" class="relative z-10 flex-1 flex flex-col items-center justify-center p-4 md:p-6">
+        <div class="max-w-4xl w-full bg-white/90 backdrop-blur-md rounded-3xl shadow-2xl border-4 border-amber-300 p-6 md:p-8 text-center relative overflow-hidden">
+            
+            <!-- Header Baris Logo Resmi: PGRI & Pemkab Wonogiri -->
+            <div class="flex flex-wrap items-center justify-center gap-8 md:gap-14 mb-6 pb-4 border-b-2 border-dashed border-emerald-200">
+                <!-- Logo PGRI -->
+                <div class="flex flex-col items-center group">
+                    <div class="w-16 h-16 md:w-20 md:h-20 rounded-full bg-white shadow-md p-1 flex items-center justify-center border-2 border-red-600 transition-transform group-hover:scale-105">
+                        <svg viewBox="0 0 120 120" class="w-full h-full">
+                            <circle cx="60" cy="60" r="56" fill="#dc2626" stroke="#991b1b" stroke-width="2"/>
+                            <circle cx="60" cy="60" r="48" fill="none" stroke="#ffffff" stroke-width="1.5"/>
+                            <circle cx="60" cy="60" r="36" fill="#15803d" stroke="#ffffff" stroke-width="2"/>
+                            <!-- Buku & Pilar -->
+                            <rect x="35" y="45" width="9" height="30" rx="1" fill="#ffffff"/>
+                            <rect x="76" y="45" width="9" height="30" rx="1" fill="#ffffff"/>
+                            <rect x="45" y="64" width="30" height="5" rx="2" fill="#ffffff"/>
+                            <rect x="45" y="70" width="30" height="5" rx="2" fill="#ffffff"/>
+                            <!-- Obor Menyala -->
+                            <polygon points="54,50 66,50 63,84 57,84" fill="#fde047" stroke="#ca8a04" stroke-width="1"/>
+                            <ellipse cx="60" cy="47" rx="11" ry="5" fill="#fde047" stroke="#ca8a04" stroke-width="1"/>
+                            <path d="M52,42 Q60,18 68,42 Q64,34 60,44 Q56,34 52,42 Z" fill="#ef4444" stroke="#ffffff" stroke-width="1"/>
+                            <!-- Teks Melingkar PGRI -->
+                            <text x="60" y="14" font-size="6.5" font-weight="800" fill="#ffffff" text-anchor="middle">PERSATUAN GURU REPUBLIK INDONESIA</text>
+                            <text x="60" y="109" font-size="11" font-weight="900" fill="#ffffff" text-anchor="middle" letter-spacing="2">PGRI</text>
+                        </svg>
+                    </div>
+                    <span class="text-[11px] font-bold text-slate-600 mt-1">Logo Resmi PGRI</span>
+                </div>
+
+                <!-- Logo Pemkab Wonogiri -->
+                <div class="flex flex-col items-center group">
+                    <div class="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-white shadow-md p-1 flex items-center justify-center border-2 border-amber-500 transition-transform group-hover:scale-105">
+                        <svg viewBox="0 0 120 120" class="w-full h-full">
+                            <!-- Perisai Kuning Wonogiri -->
+                            <path d="M14,10 L106,10 L106,62 Q106,102 60,115 Q14,102 14,62 Z" fill="#fde047" stroke="#0f172a" stroke-width="4"/>
+                            <!-- Segilima Merah Putih -->
+                            <polygon points="60,22 92,46 80,82 60,82" fill="#ffffff" stroke="#0f172a" stroke-width="1.5"/>
+                            <polygon points="60,22 28,46 40,82 60,82" fill="#dc2626" stroke="#0f172a" stroke-width="1.5"/>
+                            <!-- Lingkaran Hijau & Bintang -->
+                            <circle cx="60" cy="56" r="18" fill="#15803d" stroke="#fde047" stroke-width="2"/>
+                            <polygon points="60,25 63,33 71,33 65,38 67,45 60,40 53,45 55,38 49,33 57,33" fill="#fde047" stroke="#0f172a" stroke-width="0.8"/>
+                            <!-- Pita Merah WONOGIRI -->
+                            <path d="M26,88 Q60,95 94,88 L90,99 Q60,106 30,99 Z" fill="#dc2626" stroke="#0f172a" stroke-width="1.5"/>
+                            <text x="60" y="96" font-size="7.5" font-weight="900" fill="#0f172a" text-anchor="middle" letter-spacing="1">WONOGIRI</text>
+                        </svg>
+                    </div>
+                    <span class="text-[11px] font-bold text-slate-600 mt-1">Pemkab Wonogiri</span>
+                </div>
+            </div>
+
+            <!-- Grid Konten Utama Splash Screen -->
+            <div class="grid grid-cols-1 md:grid-cols-12 items-center gap-6 my-2">
+                <!-- Ilustrasi Karakter Maskot Bibo -->
+                <div class="md:col-span-5 flex flex-col items-center justify-center relative">
+                    <div class="w-48 h-52 md:w-64 md:h-64 relative" id="splash-bibo-container"></div>
+                    <span class="bg-emerald-100 text-emerald-800 text-xs font-extrabold px-3 py-1 rounded-full border border-emerald-300 shadow-sm -mt-2">
+                        🐝 Maskot Bibo • Kampanye G-Plast Free
+                    </span>
+                </div>
+
+                <!-- Judul Game, Sub-judul & Identitas Pembuat -->
+                <div class="md:col-span-7 text-center md:text-left space-y-3">
+                    <div class="inline-flex items-center gap-2 bg-amber-100 text-amber-800 px-3.5 py-1 rounded-full text-xs md:text-sm font-extrabold border border-amber-300">
+                        <span>🌱 Matematika Kelas 5 SD (Fase C)</span>
+                        <span>•</span>
+                        <span>🖐️ Sensor Gerak & Layar Sentuh</span>
+                    </div>
+
+                    <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-emerald-700 leading-tight drop-shadow-sm">
+                        PETUALANGAN BIBO: <br>
+                        <span class="text-amber-500">MISI BANK SAMPAH</span>
+                    </h1>
+
+                    <p class="text-slate-600 text-sm md:text-base font-semibold leading-relaxed">
+                        Bantu <b>Bibo</b> menghitung tabungan botol plastik, kardus, kaleng logam, dan kompos organik di sekolah! Pilih jawaban pada <b>Botol Tumbler Warna-Warni</b> dengan sentuhan jari atau lambaian tanganmu!
+                    </p>
+
+                    <!-- Kotak Identitas Karya Guru -->
+                    <div class="bg-gradient-to-r from-emerald-50 to-sky-50 border-l-4 border-emerald-500 p-3.5 rounded-r-2xl shadow-sm my-3">
+                        <p class="text-xs uppercase tracking-wider text-emerald-700 font-bold">Karya Inovasi Pembelajaran Digital:</p>
+                        <p class="text-lg md:text-xl font-extrabold text-slate-800 mt-0.5">Yuli Sri Untari</p>
+                        <p class="text-xs md:text-sm font-bold text-slate-600">Cabang PGRI Sidoharjo • Kabupaten Wonogiri</p>
+                    </div>
+
+                    <!-- Tombol Mulai & Petunjuk -->
+                    <div class="flex flex-wrap items-center justify-center md:justify-start gap-4 pt-2">
+                        <button onclick="AudioEngine.playClick(); showScreen('screen-edu')" class="flex-1 sm:flex-initial bg-gradient-to-b from-emerald-400 to-emerald-600 hover:from-emerald-500 hover:to-emerald-700 text-white font-fredoka text-xl md:text-2xl px-8 py-3.5 rounded-2xl shadow-[0_6px_0_#047857] active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-2">
+                            <span>🚀 MULAI / START</span>
+                        </button>
+                        <button onclick="AudioEngine.playClick(); openGuideModal()" class="flex-1 sm:flex-initial bg-gradient-to-b from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-slate-900 font-fredoka text-lg md:text-xl px-6 py-3.5 rounded-2xl shadow-[0_6px_0_#b45309] active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-2">
+                            <span>📖 PETUNJUK</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== 2. HALAMAN EDUKASI & PENGATURAN ==================== -->
+    <section id="screen-edu" class="relative z-10 flex-1 hidden flex-col items-center justify-center p-4 md:p-6">
+        <div class="max-w-5xl w-full bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl border-4 border-emerald-400 p-5 md:p-8 space-y-6">
+            
+            <!-- Header Halaman Edukasi -->
+            <div class="flex flex-wrap items-center justify-between gap-4 border-b-2 border-slate-100 pb-4">
+                <div class="flex items-center gap-3">
+                    <span class="text-3xl md:text-4xl">🌿</span>
+                    <div>
+                        <h2 class="text-2xl md:text-3xl font-extrabold text-emerald-700">Edukasi, Capaian Pembelajaran & Pengaturan</h2>
+                        <p class="text-xs md:text-sm font-bold text-slate-500">Persiapkan dirimu menjadi Agen Adiwiyata bersama Bibo!</p>
+                    </div>
+                </div>
+                <button onclick="AudioEngine.playClick(); showScreen('screen-splash')" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-4 py-2 rounded-xl text-sm flex items-center gap-1">
+                    ⬅ Kembali
+                </button>
+            </div>
+
+            <!-- Grid 2 Kolom: CP & Cara Bermain -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                
+                <!-- Tujuan Pembelajaran & Filosofi KUKABATAKU -->
+                <div class="bg-emerald-50/90 rounded-2xl p-5 border-2 border-emerald-200 space-y-4">
+                    <div class="flex items-center gap-2 text-emerald-800 font-fredoka text-lg md:text-xl">
+                        <span>🎯</span>
+                        <h3>Tujuan & Target Capaian (Fase C - Kelas 5 SD)</h3>
+                    </div>
+                    <p class="text-xs md:text-sm text-slate-700 leading-relaxed font-semibold">
+                        <b>Capaian Pembelajaran (CP):</b> Peserta didik dapat melakukan operasi hitung <b>penjumlahan, pengurangan, perkalian, dan pembagian</b> bilangan bulat dan bilangan cacah besar secara kontekstual pada studi kasus nyata Bank Sampah Sekolah.
+                    </p>
+
+                    <div class="bg-white rounded-xl p-3.5 border border-emerald-200 space-y-2">
+                        <h4 class="font-extrabold text-emerald-700 text-sm flex items-center gap-1.5">
+                            <span>⚙️</span> Filosofi KUKABATAKU (Urutan Operasi Bank Sampah):
+                        </h4>
+                        <ul class="text-xs space-y-2 text-slate-700 font-semibold">
+                            <li class="flex items-start gap-2">
+                                <span class="bg-rose-100 text-rose-700 font-extrabold px-2 py-0.5 rounded">1. ( ) Kurung</span>
+                                <span>Ibarat <b>Wadah Limbah Tertutup Prioritas Utama</b> yang wajib diselesaikan paling awal!</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="bg-amber-100 text-amber-800 font-extrabold px-2 py-0.5 rounded">2. × ÷ Kali/Bagi</span>
+                                <span>Ibarat <b>Mesin Cacah Berdaya Tinggi</b>, dikerjakan urut dari kiri setelah tanda kurung.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="bg-sky-100 text-sky-800 font-extrabold px-2 py-0.5 rounded">3. + − Tambah/Kurang</span>
+                                <span>Ibarat <b>Pengangkutan Akhir</b> ke Bank Sampah, dikerjakan paling akhir dari kiri.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Kontrol & Pengaturan Mode Sensor / Kesulitan -->
+                <div class="bg-amber-50/90 rounded-2xl p-5 border-2 border-amber-200 flex flex-col justify-between space-y-4">
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-2 text-amber-900 font-fredoka text-lg md:text-xl">
+                            <span>🎮</span>
+                            <h3>Pilih Mode Kontrol & Tingkat Kesulitan</h3>
+                        </div>
+
+                        <!-- Pilihan Kontrol: Sentuh/Klik vs Sensor Gerakan Tangan -->
+                        <div class="space-y-2">
+                            <label class="text-xs font-extrabold uppercase tracking-wider text-slate-600">1. Mode Interaksi Peserta Didik:</label>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <button id="btn-mode-touch" onclick="selectControlMode('touch')" class="p-3 rounded-xl border-2 border-emerald-500 bg-emerald-100/80 text-left transition-all flex items-center gap-3">
+                                    <span class="text-2xl">👆</span>
+                                    <div>
+                                        <div class="font-extrabold text-sm text-emerald-950">Sentuh / Klik Layar</div>
+                                        <div class="text-[11px] text-emerald-700 font-semibold">Cocok untuk Papan Interaktif, HP & Tablet</div>
+                                    </div>
+                                </button>
+                                <button id="btn-mode-motion" onclick="selectControlMode('motion')" class="p-3 rounded-xl border-2 border-slate-300 bg-white hover:bg-slate-50 text-left transition-all flex items-center gap-3">
+                                    <span class="text-2xl">🖐️</span>
+                                    <div>
+                                        <div class="font-extrabold text-sm text-slate-800">Sensor Gerak Tangan</div>
+                                        <div class="text-[11px] text-slate-500 font-semibold">Lambaikan tangan di depan Kamera/Webcam</div>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Pilihan Tingkat Kesulitan -->
+                        <div class="space-y-2">
+                            <label class="text-xs font-extrabold uppercase tracking-wider text-slate-600">2. Tingkat Kesulitan Soal Cerita (25 Soal/Level):</label>
+                            <div class="grid grid-cols-3 gap-2.5">
+                                <button id="diff-easy" onclick="selectDifficulty('easy')" class="p-2.5 rounded-xl border-2 border-emerald-500 bg-emerald-100 text-center transition-all shadow-sm">
+                                    <div class="text-lg">🌱</div>
+                                    <div class="font-extrabold text-xs md:text-sm text-emerald-900">Tunas Muda</div>
+                                    <div class="text-[10px] text-emerald-700 font-bold">Ratusan & Mudah</div>
+                                </button>
+                                <button id="diff-medium" onclick="selectDifficulty('medium')" class="p-2.5 rounded-xl border-2 border-slate-300 bg-white text-center transition-all">
+                                    <div class="text-lg">🌿</div>
+                                    <div class="font-extrabold text-xs md:text-sm text-slate-800">Pohon Rindang</div>
+                                    <div class="text-[10px] text-slate-500 font-bold">Ribuan & Campuran</div>
+                                </button>
+                                <button id="diff-hard" onclick="selectDifficulty('hard')" class="p-2.5 rounded-xl border-2 border-slate-300 bg-white text-center transition-all">
+                                    <div class="text-lg">🌳</div>
+                                    <div class="font-extrabold text-xs md:text-sm text-slate-800">Pahlawan Bumi</div>
+                                    <div class="text-[10px] text-slate-500 font-bold">Tantangan Penuh</div>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Pilihan Paket Soal ( Pembagian 25 Soal menjadi: 5 Soal Kilat, 10 Soal, dan 10 Soal ) -->
+                        <div class="space-y-2">
+                            <label class="text-xs font-extrabold uppercase tracking-wider text-slate-600">3. Pilih Paket Misi (Pembagian 25 Soal):</label>
+                            <div class="grid grid-cols-3 gap-2.5">
+                                <button id="pack-kilat5" onclick="selectQuestionPack('kilat5')" class="p-2.5 rounded-xl border-2 border-amber-500 bg-amber-100 text-center transition-all shadow-sm">
+                                    <div class="text-base">⚡</div>
+                                    <div class="font-extrabold text-xs md:text-sm text-amber-950">5 Soal Kilat</div>
+                                    <div class="text-[10px] text-amber-800 font-bold">Misi Soal 1 – 5</div>
+                                </button>
+                                <button id="pack-paket10a" onclick="selectQuestionPack('paket10a')" class="p-2.5 rounded-xl border-2 border-slate-300 bg-white text-center transition-all">
+                                    <div class="text-base">📦</div>
+                                    <div class="font-extrabold text-xs md:text-sm text-slate-800">10 Soal (Bag. A)</div>
+                                    <div class="text-[10px] text-slate-500 font-bold">Misi Soal 6 – 15</div>
+                                </button>
+                                <button id="pack-paket10b" onclick="selectQuestionPack('paket10b')" class="p-2.5 rounded-xl border-2 border-slate-300 bg-white text-center transition-all">
+                                    <div class="text-base">🏆</div>
+                                    <div class="font-extrabold text-xs md:text-sm text-slate-800">10 Soal (Bag. B)</div>
+                                    <div class="text-[10px] text-slate-500 font-bold">Misi Soal 16 – 25</div>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tombol Berangkat Bermain -->
+                    <button onclick="startGame()" class="w-full bg-gradient-to-b from-emerald-400 to-emerald-600 hover:from-emerald-500 hover:to-emerald-700 text-white font-fredoka text-xl md:text-2xl py-3.5 rounded-2xl shadow-[0_6px_0_#047857] active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-2">
+                        <span>🐝 MULAI PETUALANGAN SEKARANG!</span>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== 3. HALAMAN UTAMA PERMAINAN / GAMEPLAY ==================== -->
+    <section id="screen-game" class="relative z-10 flex-1 hidden flex-col justify-between p-3 md:p-6 max-w-6xl w-full mx-auto">
+        
+        <!-- Top Bar: Skor Poin Daun, Plastik Hemat, Nyawa, Timer & Kontrol -->
+        <div class="bg-white/95 backdrop-blur-md rounded-2xl shadow-lg border-2 border-emerald-300 p-3 md:p-4 flex flex-wrap items-center justify-between gap-2 md:gap-4">
+            
+            <!-- Poin Daun & Botol Terselamatkan -->
+            <div class="flex items-center gap-2 md:gap-4">
+                <div class="bg-emerald-100 border-2 border-emerald-400 px-3 py-1.5 rounded-xl flex items-center gap-2">
+                    <span class="text-xl md:text-2xl">🍃</span>
+                    <div>
+                        <div class="text-[10px] font-extrabold uppercase text-emerald-700 leading-none">Poin Daun</div>
+                        <div id="hud-score" class="font-fredoka text-lg md:text-xl text-emerald-900 leading-tight">0</div>
+                    </div>
+                </div>
+
+                <div class="bg-sky-100 border-2 border-sky-400 px-3 py-1.5 rounded-xl flex items-center gap-2">
+                    <span class="text-xl md:text-2xl">🧴</span>
+                    <div>
+                        <div class="text-[10px] font-extrabold uppercase text-sky-700 leading-none">Plastik Hemat</div>
+                        <div class="font-fredoka text-sm md:text-lg text-sky-900 leading-tight"><span id="hud-bottles">0</span> Botol</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Nomor Soal & Nyawa / Kesempatan -->
+            <div class="flex items-center gap-3">
+                <div class="bg-amber-100 border-2 border-amber-400 px-3 py-1.5 rounded-xl text-center">
+                    <div class="text-[10px] font-extrabold uppercase text-amber-800 leading-none">Misi Ke</div>
+                    <div id="hud-progress" class="font-fredoka text-base md:text-lg text-amber-900 leading-tight">1 / 25</div>
+                </div>
+
+                <div class="bg-rose-50 border-2 border-rose-300 px-3 py-1.5 rounded-xl flex items-center gap-1" id="hud-lives" title="Kesempatan / Nyawa">
+                    <span class="text-lg md:text-xl">❤️</span>
+                    <span class="text-lg md:text-xl">❤️</span>
+                    <span class="text-lg md:text-xl">❤️</span>
+                </div>
+            </div>
+
+            <!-- Waktu (Timer) & Tombol Bantuan KUKABATAKU / Sensor / Sound / Pause -->
+            <div class="flex items-center gap-2">
+                <div class="bg-slate-100 border-2 border-slate-300 px-3 py-1.5 rounded-xl flex items-center gap-1.5">
+                    <span class="text-lg">⏱️</span>
+                    <span id="hud-timer" class="font-fredoka text-lg md:text-xl text-slate-800">45s</span>
+                </div>
+
+                <!-- Tombol Modal Bantuan Pedagogis KUKABATAKU -->
+                <button onclick="AudioEngine.playClick(); openPemdasModal()" class="bg-amber-400 hover:bg-amber-500 text-slate-900 font-extrabold px-3 py-2 rounded-xl border-b-4 border-amber-600 text-xs md:text-sm flex items-center gap-1" title="Rumus KUKABATAKU">
+                    <span>💡</span> <span class="hidden sm:inline">KUKABATAKU</span>
+                </button>
+
+                <!-- Tombol Toggle Sensor Tangan -->
+                <button id="btn-hud-sensor" onclick="AudioEngine.playClick(); toggleMotionSensor()" class="bg-sky-500 hover:bg-sky-600 text-white font-extrabold p-2 rounded-xl border-b-4 border-sky-700 text-sm" title="Aktifkan/Matikan Sensor Gerak Kamera">
+                    🖐️
+                </button>
+
+                <!-- Tombol Sound Toggle -->
+                <button id="btn-hud-sound" onclick="AudioEngine.toggleMute()" class="bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold p-2 rounded-xl border-b-4 border-emerald-700 text-sm" title="Suara Hidup/Mati">
+                    🔊
+                </button>
+
+                <!-- Tombol Pause -->
+                <button onclick="AudioEngine.playClick(); togglePauseModal(true)" class="bg-slate-600 hover:bg-slate-700 text-white font-extrabold p-2 rounded-xl border-b-4 border-slate-800 text-sm" title="Jeda Permainan">
+                    ⏸️
+                </button>
+            </div>
+        </div>
+
+        <!-- Area Tengah: Maskot Bibo + Kartu Soal Cerita Bank Sampah -->
+        <div class="my-4 grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
+            
+            <!-- Karakter Maskot Bibo + Balon Bicara Motivasi -->
+            <div class="lg:col-span-4 flex flex-col items-center justify-center relative">
+                <div id="bibo-speech" class="bg-white border-2 border-amber-400 rounded-2xl px-4 py-2.5 shadow-md text-xs md:text-sm font-bold text-slate-700 text-center max-w-xs mb-1 relative">
+                    "Ayo pilih <b>Botol Tumbler</b> dengan hasil hitungan yang tepat!"
+                    <div class="w-3 h-3 bg-white border-r-2 border-b-2 border-amber-400 transform rotate-45 absolute -bottom-1.5 left-1/2 -translate-x-1/2"></div>
+                </div>
+                <div class="w-36 h-40 md:w-48 md:h-52" id="game-bibo-container"></div>
+            </div>
+
+            <!-- Kartu Soal Cerita Kontekstual -->
+            <div class="lg:col-span-8 bg-white/95 backdrop-blur-md rounded-3xl shadow-xl border-4 border-amber-300 p-5 md:p-7 relative overflow-hidden">
+                <!-- Kategori Studi Kasus Lingkungan -->
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                    <span id="q-category" class="bg-emerald-100 text-emerald-800 font-extrabold text-xs md:text-sm px-3.5 py-1 rounded-full border border-emerald-300">
+                        ♻️ Studi Kasus: Bank Sampah Botol Plastik
+                    </span>
+                    <span id="q-reward-badge" class="bg-sky-100 text-sky-800 font-extrabold text-xs px-3 py-1 rounded-full border border-sky-300">
+                        +150 Botol Terselamatkan
+                    </span>
+                </div>
+
+                <!-- Narasi Cerita Soal -->
+                <p id="q-story" class="text-slate-700 font-bold text-base md:text-lg leading-relaxed mb-4">
+                    Memuat cerita petualangan Bibo...
+                </p>
+
+                <!-- Kotak Operasi Matematika -->
+                <div class="bg-gradient-to-r from-amber-50 via-yellow-50 to-emerald-50 border-2 border-dashed border-amber-400 rounded-2xl p-4 text-center shadow-inner">
+                    <div class="text-xs font-extrabold uppercase text-amber-800 mb-1">Operasi Hitung Matematika:</div>
+                    <div id="q-expression" class="font-fredoka text-2xl sm:text-3xl md:text-4xl text-slate-900 tracking-wide">
+                        (120 + 80) × 5 = ?
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Area Bawah: 4 Pilihan Jawaban Berbentuk Tumbler / Botol Minum Warna-Warni -->
+        <div class="mb-2">
+            <div class="text-center mb-2">
+                <span class="bg-white/90 text-slate-700 text-xs md:text-sm font-extrabold px-4 py-1 rounded-full shadow-sm border border-slate-200">
+                    🧴 Klik / Sentuh <b>Botol Tumbler</b> yang Benar (atau Lambaikan Tangan di Kamera):
+                </span>
+            </div>
+            <div id="tumbler-options-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
+                <!-- Diisi secara dinamis oleh JavaScript dengan 4 Botol Tumbler SVG -->
+            </div>
+        </div>
+
+    </section>
+
+    <!-- ==================== 4. HALAMAN HASIL / GAME OVER / VICTORY ==================== -->
+    <section id="screen-result" class="relative z-10 flex-1 hidden flex-col items-center justify-center p-4 md:p-6">
+        <div class="max-w-4xl w-full bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl border-4 border-amber-400 p-6 md:p-8 text-center space-y-5">
+            
+            <!-- Bintang & Gelar Agen Adiwiyata -->
+            <div id="result-stars" class="text-4xl md:text-5xl space-x-2 animate-bounce">
+                ⭐ ⭐ ⭐
+            </div>
+
+            <div>
+                <span class="bg-emerald-100 text-emerald-800 font-extrabold text-xs md:text-sm px-4 py-1 rounded-full border border-emerald-300 uppercase tracking-wider">
+                    Sertifikat Apresiasi Lingkungan Sekolah
+                </span>
+                <h2 id="result-title" class="text-3xl md:text-4xl font-extrabold text-emerald-700 mt-2">
+                    SELAMAT! AGEN ADIWIYATA UTAMA
+                </h2>
+                <p id="result-subtitle" class="text-sm md:text-base font-bold text-slate-600 mt-1">
+                    Kamu dan Bibo berhasil menjaga kebersihan lingkungan sekolah bersama Bank Sampah!
+                </p>
+            </div>
+
+            <!-- Statistik Skor Akhir -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl mx-auto">
+                <div class="bg-emerald-50 border-2 border-emerald-300 rounded-2xl p-4">
+                    <div class="text-2xl">🍃</div>
+                    <div class="text-xs font-extrabold text-emerald-700 uppercase">Total Poin Daun</div>
+                    <div id="res-score" class="font-fredoka text-3xl text-emerald-900">800</div>
+                </div>
+                <div class="bg-sky-50 border-2 border-sky-300 rounded-2xl p-4">
+                    <div class="text-2xl">🧴</div>
+                    <div class="text-xs font-extrabold text-sky-700 uppercase">Plastik Hemat</div>
+                    <div class="font-fredoka text-2xl text-sky-900"><span id="res-bottles">1.250</span> Botol</div>
+                </div>
+                <div class="bg-amber-50 border-2 border-amber-300 rounded-2xl p-4">
+                    <div class="text-2xl">🎯</div>
+                    <div class="text-xs font-extrabold text-amber-800 uppercase">Ketepatan Hitung</div>
+                    <div id="res-accuracy" class="font-fredoka text-3xl text-amber-900">100%</div>
+                </div>
+            </div>
+
+            <!-- Rincian Evaluasi Jawaban & Pembahasan Singkat -->
+            <div class="text-left bg-slate-50 rounded-2xl p-4 border-2 border-slate-200 max-h-60 overflow-y-auto space-y-2.5">
+                <h3 class="font-fredoka text-base md:text-lg text-slate-800 sticky top-0 bg-slate-50 pb-1 border-b border-slate-200">
+                    📋 Rincian Evaluasi & Pembahasan KUKABATAKU:
+                </h3>
+                <div id="res-review-list" class="space-y-2 text-xs md:text-sm">
+                    <!-- Diisi secara dinamis -->
+                </div>
+            </div>
+
+            <!-- Tombol Main Lagi & Keluar -->
+            <div class="flex flex-wrap items-center justify-center gap-4 pt-2">
+                <button onclick="AudioEngine.playClick(); startGame()" class="bg-gradient-to-b from-emerald-400 to-emerald-600 hover:from-emerald-500 hover:to-emerald-700 text-white font-fredoka text-xl px-8 py-3 rounded-2xl shadow-[0_5px_0_#047857] active:translate-y-1 active:shadow-none transition-all">
+                    🔄 MAIN LAGI
+                </button>
+                <button onclick="AudioEngine.playClick(); showScreen('screen-splash')" class="bg-gradient-to-b from-slate-500 to-slate-700 hover:from-slate-600 hover:to-slate-800 text-white font-fredoka text-xl px-8 py-3 rounded-2xl shadow-[0_5px_0_#1e293b] active:translate-y-1 active:shadow-none transition-all">
+                    🏠 KELUAR KE MENU
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== MODAL UMPAN BALIK LANGSUNG (FEEDBACK VISUAL/AUDIO) ==================== -->
+    <div id="modal-feedback" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 border-4 border-emerald-400 shadow-2xl text-center space-y-4 animate-bounce" style="animation-iteration-count: 1; animation-duration: 0.4s;">
+            <div id="fb-icon" class="text-5xl">🎉</div>
+            <h3 id="fb-title" class="font-fredoka text-2xl md:text-3xl text-emerald-700">HEBAT! TUMBLER SEGAR TERPILIH!</h3>
+            <p id="fb-desc" class="text-sm md:text-base font-bold text-slate-600"></p>
+            <div class="bg-amber-50 border-2 border-amber-200 rounded-2xl p-3.5 text-left text-xs md:text-sm font-semibold text-slate-700">
+                <div class="font-extrabold text-amber-800 mb-1">💡 Langkah Penyelesaian KUKABATAKU:</div>
+                <div id="fb-explanation"></div>
+            </div>
+            <button onclick="nextQuestion()" class="w-full bg-gradient-to-b from-emerald-400 to-emerald-600 text-white font-fredoka text-xl py-3 rounded-2xl shadow-[0_5px_0_#047857] active:translate-y-1 active:shadow-none">
+                LANJUTKAN MISI ➔
+            </button>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL BANTUAN PEDAGOGIS (KUKABATAKU / PEMDAS) ==================== -->
+    <div id="modal-pemdas" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
+        <div class="bg-white rounded-3xl max-w-xl w-full p-6 border-4 border-amber-400 shadow-2xl space-y-4">
+            <div class="flex items-center justify-between border-b pb-3">
+                <h3 class="font-fredoka text-2xl text-amber-700 flex items-center gap-2">
+                    <span>🏭</span> Panduan KUKABATAKU Bank Sampah
+                </h3>
+                <button onclick="closePemdasModal()" class="bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold px-3 py-1 rounded-xl">✕</button>
+            </div>
+            <p class="text-xs md:text-sm font-bold text-slate-600">
+                Agar hitungan tabungan sampah dan penghematan botol bersama Bibo selalu tepat, ikuti urutan prioritas pengolahan berikut:
+            </p>
+            <div class="space-y-3 text-xs md:text-sm">
+                <div class="bg-rose-50 border-l-4 border-rose-500 p-3 rounded-r-xl">
+                    <div class="font-extrabold text-rose-800 text-base">1. KU — Tanda Kurung ( ... )</div>
+                    <p class="text-slate-700 font-semibold mt-0.5">Ibarat <b>Wadah Limbah Tertutup Prioritas Utama</b>. Angka di dalam kurung harus dihitung paling dulu sebelum dicampur dengan yang lain!</p>
+                </div>
+                <div class="bg-amber-50 border-l-4 border-amber-500 p-3 rounded-r-xl">
+                    <div class="font-extrabold text-amber-900 text-base">2. KABATA — Kali (×) atau Bagi (÷)</div>
+                    <p class="text-slate-700 font-semibold mt-0.5">Ibarat <b>Mesin Cacah Berdaya Tinggi</b>. Sangat kuat! Dikerjakan terlebih dahulu daripada penjumlahan/pengurangan (urut dari sebelah kiri).</p>
+                </div>
+                <div class="bg-sky-50 border-l-4 border-sky-500 p-3 rounded-r-xl">
+                    <div class="font-extrabold text-sky-900 text-base">3. TAKU — Tambah (+) atau Kurang (−)</div>
+                    <p class="text-slate-700 font-semibold mt-0.5">Ibarat <b>Pengangkutan Akhir</b> ke gudang Bank Sampah. Dikerjakan paling akhir setelah kurung dan mesin cacah selesai.</p>
+                </div>
+            </div>
+            <button onclick="closePemdasModal()" class="w-full bg-amber-400 hover:bg-amber-500 text-slate-900 font-fredoka text-lg py-2.5 rounded-xl shadow">
+                SAYA PAHAM! 👍
+            </button>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL PETUNJUK BERMAIN ==================== -->
+    <div id="modal-guide" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
+        <div class="bg-white rounded-3xl max-w-xl w-full p-6 border-4 border-emerald-400 shadow-2xl space-y-4">
+            <div class="flex items-center justify-between border-b pb-3">
+                <h3 class="font-fredoka text-2xl text-emerald-700">📖 Petunjuk Cara Bermain & Sensor</h3>
+                <button onclick="closeGuideModal()" class="bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold px-3 py-1 rounded-xl">✕</button>
+            </div>
+            <div class="space-y-3 text-xs md:text-sm font-semibold text-slate-700">
+                <div class="flex items-start gap-3 bg-emerald-50 p-3 rounded-xl">
+                    <span class="text-2xl">🧴</span>
+                    <div>
+                        <b class="text-emerald-900">Pilih Botol Tumbler Warna-Warni:</b>
+                        Setiap soal memiliki 4 pilihan botol minum (Hijau, Kuning, Biru, Oranye). Saat dipilih, tutup botol akan terbuka dengan suara <i>clink</i> dan air segar memercik!
+                    </div>
+                </div>
+                <div class="flex items-start gap-3 bg-sky-50 p-3 rounded-xl">
+                    <span class="text-2xl">🖐️</span>
+                    <div>
+                        <b class="text-sky-900">Mode Sensor Gerakan Tangan (Webcam):</b>
+                        Aktifkan ikon tangan 🖐️. Kamera akan membagi layar menjadi 4 kolom (A, B, C, D). Lambaikan tanganmu di zona huruf botol yang ingin kamu pilih hingga lingkaran hijau penuh!
+                    </div>
+                </div>
+                <div class="flex items-start gap-3 bg-amber-50 p-3 rounded-xl">
+                    <span class="text-2xl">🍃</span>
+                    <div>
+                        <b class="text-amber-900">Raih Poin Daun & Gelar Agen Adiwiyata:</b>
+                        Jawab dengan benar sebelum waktu habis untuk mengumpulkan Poin Daun 🍃 dan menyelamatkan ratusan botol plastik sekolah!
+                    </div>
+                </div>
+            </div>
+            <button onclick="closeGuideModal()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-fredoka text-lg py-2.5 rounded-xl shadow">
+                SIAP BERMAIN! 🚀
+            </button>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL PAUSE ==================== -->
+    <div id="modal-pause" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-6 border-4 border-amber-400 shadow-2xl text-center space-y-4">
+            <div class="text-5xl">⏸️</div>
+            <h3 class="font-fredoka text-2xl text-slate-800">PERMAINAN DIJEDA</h3>
+            <p class="text-xs font-bold text-slate-500">Istirahat sejenak sambil minum dari tumblermu ya!</p>
+            <div class="space-y-2.5 pt-2">
+                <button onclick="togglePauseModal(false)" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-fredoka text-lg py-2.5 rounded-xl shadow">
+                    ▶️ LANJUTKAN
+                </button>
+                <button onclick="togglePauseModal(false); showScreen('screen-splash')" class="w-full bg-rose-500 hover:bg-rose-600 text-white font-fredoka text-lg py-2.5 rounded-xl shadow">
+                    🏠 KELUAR KE MENU UTAMA
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== JAVASCRIPT: AUDIO SINTETIS, SOAL BANK SAMPAH, & SENSOR GERAK ==================== -->
+    <script>
+        /* =========================================================================
+           1. WEB AUDIO API: EFEK SUARA SINTETIS LEBAH CERIA & TUTUP BOTOL TUMBLER
+           ========================================================================= */
+        const AudioEngine = {
+            ctx: null,
+            muted: false,
+            init() {
+                if (!this.ctx) {
+                    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                    this.ctx = new AudioCtx();
+                }
+                if (this.ctx.state === 'suspended') {
+                    this.ctx.resume();
+                }
+            },
+            toggleMute() {
+                this.muted = !this.muted;
+                const btn = document.getElementById('btn-hud-sound');
+                if (btn) btn.textContent = this.muted ? '🔇' : '🔊';
+            },
+            playClick() {
+                if (this.muted) return;
+                this.init();
+                const now = this.ctx.currentTime;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(520, now);
+                osc.frequency.exponentialRampToValueAtTime(880, now + 0.08);
+                gain.gain.setValueAtTime(0.18, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start(now);
+                osc.stop(now + 0.09);
+            },
+            // Bunyi Tutup Botol Terbuka ("Clink/Pop") + Percikan Air Segar
+            playBottleSplash() {
+                if (this.muted) return;
+                this.init();
+                const now = this.ctx.currentTime;
+
+                // Nada Clink/Pop tutup botol
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(420, now);
+                osc.frequency.exponentialRampToValueAtTime(1250, now + 0.11);
+                gain.gain.setValueAtTime(0.28, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.12);
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start(now);
+                osc.stop(now + 0.13);
+
+                // Percikan air segar (White noise burst pendek dengan filter)
+                const bufferSize = this.ctx.sampleRate * 0.18;
+                const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+                const data = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) {
+                    data[i] = Math.random() * 2 - 1;
+                }
+                const noise = this.ctx.createBufferSource();
+                noise.buffer = buffer;
+
+                const filter = this.ctx.createBiquadFilter();
+                filter.type = 'bandpass';
+                filter.frequency.setValueAtTime(1600, now + 0.05);
+
+                const nGain = this.ctx.createGain();
+                nGain.gain.setValueAtTime(0.18, now + 0.05);
+                nGain.gain.exponentialRampToValueAtTime(0.01, now + 0.22);
+
+                noise.connect(filter);
+                filter.connect(nGain);
+                nGain.connect(this.ctx.destination);
+                noise.start(now + 0.05);
+            },
+            // Melodi Lebah Ceria saat Jawaban Benar
+            playHappyBee() {
+                if (this.muted) return;
+                this.init();
+                const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+                notes.forEach((freq, idx) => {
+                    const now = this.ctx.currentTime + idx * 0.09;
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(freq, now);
+                    gain.gain.setValueAtTime(0.22, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.21);
+                });
+            },
+            // Nada lembut saat jawaban kurang tepat
+            playWrongBuzz() {
+                if (this.muted) return;
+                this.init();
+                const now = this.ctx.currentTime;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(190, now);
+                osc.frequency.linearRampToValueAtTime(130, now + 0.3);
+                gain.gain.setValueAtTime(0.15, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.32);
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start(now);
+                osc.stop(now + 0.33);
+            }
+        };
+
+        /* =========================================================================
+           2. DATABASE SOAL CERITA KONTEKSTUAL BANK SAMPAH & GERAKAN TUMBLER KELAS 5
+              (25 SOAL PER LEVEL = TOTAL 75 SOAL)
+           ========================================================================= */
+        const QUESTION_BANK = {
+            easy: [
+                {
+                    category: "🧴 Gerakan Bawa Tumbler Kelas 5",
+                    story: "Siswa kelas 5 berjumlah 28 anak. Setiap anak membawa botol tumbler sendiri sehingga menghemat 3 botol plastik sekali pakai setiap hari. Jika ditambah 16 botol yang dihemat Bapak/Ibu Guru, berapa total botol plastik yang diselamatkan hari itu?",
+                    expression: "(28 × 3) + 16 = ?",
+                    options: [100, 94, 110, 84],
+                    correct: 100,
+                    savedBottles: 100,
+                    explanation: "Kerjakan dalam kurung terlebih dahulu: (28 × 3) = 84 botol. Lalu tambahkan penghematan guru: 84 + 16 = 100 botol terselamatkan!"
+                },
+                {
+                    category: "📦 Bank Sampah Kardus Bekas",
+                    story: "Gudang Bank Sampah Bibo memiliki 145 kg kardus bekas. Pagi ini siswa mengumpulkan lagi 85 kg kardus. Siangnya, 110 kg kardus dikirim ke pabrik daur ulang. Berapa kg kardus yang masih ada di gudang?",
+                    expression: "145 + 85 − 110 = ?",
+                    options: [110, 120, 130, 140],
+                    correct: 120,
+                    savedBottles: 120,
+                    explanation: "Operasi tambah dan kurang setara, kerjakan urut dari kiri: 145 + 85 = 230 kg. Kemudian dikurangi pengiriman: 230 − 110 = 120 kg."
+                },
+                {
+                    category: "🪴 Kebun Vertikal Pot Botol Gantung",
+                    story: "Bibo mengajak 6 kelompok kerja bakti membuat pot gantung dari botol plastik bekas. Tiap kelompok menghias 25 botol, namun ada 12 botol yang belum selesai dicat. Berapa botol pot gantung yang sudah siap dipasang?",
+                    expression: "(6 × 25) − 12 = ?",
+                    options: [138, 142, 128, 150],
+                    correct: 138,
+                    savedBottles: 138,
+                    explanation: "Hitung perkalian di dalam kurung dulu: 6 × 25 = 150 botol. Lalu kurangi yang belum dicat: 150 − 12 = 138 botol siap pasang!"
+                },
+                {
+                    category: "🍽️ Piring Rotan Kantin Bebas Plastik",
+                    story: "Kantin sehat sekolah menyediakan 180 piring rotan. Saat jam istirahat pertama terpakai 95 piring, namun petugas kantin langsung mencuci bersih 45 piring sehingga siap dipakai lagi. Berapa piring rotan bersih yang tersedia sekarang?",
+                    expression: "180 − 95 + 45 = ?",
+                    options: [120, 130, 140, 115],
+                    correct: 130,
+                    savedBottles: 130,
+                    explanation: "Kerjakan urut dari kiri: 180 − 95 = 85 piring. Setelah dicuci bersih bertambah lagi: 85 + 45 = 130 piring rotan."
+                },
+                {
+                    category: "🥫 Penimbangan Kaleng Logam",
+                    story: "Terdapat 4 karung kaleng bekas di Bank Sampah. Masing-masing karung berisi 40 kaleng. Seluruh kaleng tersebut akan dimasukkan sama rata ke dalam 8 kotak daur ulang. Berapa isi kaleng pada setiap kotak?",
+                    expression: "(4 × 40) ÷ 8 = ?",
+                    options: [15, 20, 25, 30],
+                    correct: 20,
+                    savedBottles: 90,
+                    explanation: "Hitung total kaleng dalam kurung: 4 × 40 = 160 kaleng. Kemudian bagi ke 8 kotak: 160 ÷ 8 = 20 kaleng per kotak."
+                },
+                {
+                    category: "🍂 Rumah Kompos Daun Kering",
+                    story: "Hari Senin terkumpul 65 ember daun kering dan hari Selasa terkumpul 55 ember. Setiap 4 ember daun kering dapat diolah menjadi 1 karung pupuk kompos organik. Berapa karung pupuk kompos yang dihasilkan?",
+                    expression: "(65 + 55) ÷ 4 = ?",
+                    options: [25, 30, 35, 40],
+                    correct: 30,
+                    savedBottles: 110,
+                    explanation: "Kerjakan di dalam tanda kurung (wadah prioritas) dulu: 65 + 55 = 120 ember. Lalu bagi dengan 4: 120 ÷ 4 = 30 karung kompos."
+                },
+                {
+                    category: "💧 Isi Ulang Tumbler Pagi Hari",
+                    story: "Di kelas 5 terdapat 5 kelompok belajar. Tiap kelompok memiliki 6 siswa yang rajin mengisi ulang tumbler. Jika setiap siswa mengisi ulang 2 kali sehari, berapa kali pengisian galon hari itu?",
+                    expression: "5 × 6 × 2 = ?",
+                    options: [60, 50, 70, 55],
+                    correct: 60,
+                    savedBottles: 60,
+                    explanation: "Kalikan urut dari kiri: 5 × 6 = 30 siswa. Lalu 30 × 2 = 60 kali pengisian."
+                },
+                {
+                    category: "♻️ Sortir Tutup Botol Warna-Warni",
+                    story: "Bibo mengumpulkan 250 tutup botol hijau dan 150 tutup botol biru untuk mozaik taman. Sebanyak 80 tutup botol sudah ditempel di dinding taman. Berapa tutup botol yang tersisa?",
+                    expression: "(250 + 150) − 80 = ?",
+                    options: [320, 300, 340, 280],
+                    correct: 320,
+                    savedBottles: 120,
+                    explanation: "Jumlahkan dalam kurung: 250 + 150 = 400 tutup botol. Kurangi yang ditempel: 400 − 80 = 320 tutup botol."
+                },
+                {
+                    category: "🌱 Bibit Tanaman Bank Sampah",
+                    story: "Hasil tabungan sampah plastik ditukar dengan 90 bibit cabai. Bibit itu dibagikan rata kepada 6 kelas, lalu Kelas 5 mendapat bonus tambahan 5 bibit karena paling bersih. Berapa bibit yang diterima Kelas 5?",
+                    expression: "(90 ÷ 6) + 5 = ?",
+                    options: [20, 18, 22, 25],
+                    correct: 20,
+                    savedBottles: 95,
+                    explanation: "Kerjakan pembagian dalam kurung: 90 ÷ 6 = 15 bibit. Ditambah bonus 5 bibit: 15 + 5 = 20 bibit."
+                },
+                {
+                    category: "📦 Kotak Kardus Perpustakaan Hijau",
+                    story: "Ada 7 tumpukan kardus bekas di pojok baca. Tiap tumpukan berisi 15 kardus. Jika 25 kardus dipakai untuk membuat rak buku kreatif, berapa sisa kardus yang ada?",
+                    expression: "(7 × 15) − 25 = ?",
+                    options: [80, 75, 85, 90],
+                    correct: 80,
+                    savedBottles: 80,
+                    explanation: "Kalikan dalam kurung dulu: 7 × 15 = 105 kardus. Dikurangi 25 kardus: 105 − 25 = 80 kardus."
+                },
+                {
+                    category: "🧴 Piket Cuci Botol Minum",
+                    story: "Sebanyak 120 botol tumbler dicuci bersih oleh siswa sebelum pulang. Keesokan paginya datang lagi 40 botol baru dari kelas sebelah, lalu 60 botol dibagikan saat senam pagi. Berapa botol di rak penyimpanan?",
+                    expression: "120 + 40 − 60 = ?",
+                    options: [100, 90, 110, 120],
+                    correct: 100,
+                    savedBottles: 100,
+                    explanation: "Hitung dari kiri: 120 + 40 = 160 botol. Dikurangi 60 botol: 160 − 60 = 100 botol."
+                },
+                {
+                    category: "🥫 Kerajinan Tempat Pensil Kaleng",
+                    story: "Siswa mengumpulkan 96 kaleng susu bekas. Kaleng tersebut dihias oleh 8 regu pramuka sama banyak. Tiap regu menyumbangkan 3 kaleng hias ke ruang guru. Berapa sisa kaleng pada tiap regu?",
+                    expression: "(96 ÷ 8) − 3 = ?",
+                    options: [9, 8, 10, 12],
+                    correct: 9,
+                    savedBottles: 85,
+                    explanation: "Bagi di dalam kurung: 96 ÷ 8 = 12 kaleng per regu. Dikurangi 3 kaleng: 12 − 3 = 9 kaleng."
+                },
+                {
+                    category: "🍃 Poin Daun Kebersihan Kelas",
+                    story: "Kelas 5 memiliki modal 200 Poin Daun. Selama 4 hari berturut-turut, mereka mendapat tambahan 25 poin per hari karena bebas sampah plastik. Berapa total Poin Daun mereka?",
+                    expression: "200 + (4 × 25) = ?",
+                    options: [300, 280, 320, 250],
+                    correct: 300,
+                    savedBottles: 110,
+                    explanation: "Hitung perkalian dulu: 4 × 25 = 100 poin. Lalu tambahkan modal awal: 200 + 100 = 300 Poin Daun."
+                },
+                {
+                    category: "🛍️ Tas Belanja Kain (Eco-Bag)",
+                    story: "Ibu Guru membawa 8 paket tas belanja kain ramah lingkungan. Tiap paket berisi 12 tas. Jika 16 tas diberikan kepada petugas kantin, berapa tas kain yang dibagikan ke siswa?",
+                    expression: "(8 × 12) − 16 = ?",
+                    options: [80, 76, 84, 90],
+                    correct: 80,
+                    savedBottles: 96,
+                    explanation: "Kalikan dalam kurung: 8 × 12 = 96 tas. Kurangi 16 tas kantin: 96 − 16 = 80 tas kain."
+                },
+                {
+                    category: "🌾 Panen Sayur Organik Kompos",
+                    story: "Kebun sekolah memanen 75 ikat kangkung organik dan 45 ikat bayam organik. Seluruh sayuran diikat ke dalam 6 keranjang bambu sama rata. Berapa ikat sayur di setiap keranjang?",
+                    expression: "(75 + 45) ÷ 6 = ?",
+                    options: [20, 15, 25, 30],
+                    correct: 20,
+                    savedBottles: 120,
+                    explanation: "Jumlahkan di dalam kurung: 75 + 45 = 120 ikat sayur. Bagi ke 6 keranjang: 120 ÷ 6 = 20 ikat."
+                },
+                {
+                    category: "🧴 Kampanye Jumat Bersih",
+                    story: "Pada kegiatan Jumat Bersih, Kelas 5A memungut 85 botol plastik, Kelas 5B memungut 95 botol plastik, dan Kelas 4 memungut 70 botol plastik. Berapa jumlah seluruh botol plastik yang terkumpul?",
+                    expression: "85 + 95 + 70 = ?",
+                    options: [250, 240, 260, 230],
+                    correct: 250,
+                    savedBottles: 150,
+                    explanation: "Jumlahkan urut dari kiri: 85 + 95 = 180 botol. Lalu 180 + 70 = 250 botol plastik."
+                },
+                {
+                    category: "♻️ Bata Plastik (Eco-Brick) Taman",
+                    story: "Untuk membuat pembatas taman bunga Bibo, dibutuhkan 150 Eco-Brick. Saat ini sudah tersedia 3 kotak yang masing-masing berisi 30 Eco-Brick. Berapa Eco-Brick lagi yang harus dibuat?",
+                    expression: "150 − (3 × 30) = ?",
+                    options: [60, 50, 70, 80],
+                    correct: 60,
+                    savedBottles: 115,
+                    explanation: "Hitung isi 3 kotak dulu: 3 × 30 = 90 Eco-Brick. Kekurangannya: 150 − 90 = 60 Eco-Brick."
+                },
+                {
+                    category: "💧 Hemat Air Cuci Tangan",
+                    story: "Kran hemat air di sekolah mengalirkan 40 liter air di pagi hari dan 35 liter di siang hari. Air buangannya ditampung untuk menyiram 5 petak kebun sama rata. Berapa liter air untuk tiap petak kebun?",
+                    expression: "(40 + 35) ÷ 5 = ?",
+                    options: [15, 12, 18, 20],
+                    correct: 15,
+                    savedBottles: 75,
+                    explanation: "Jumlahkan dalam kurung: 40 + 35 = 75 liter. Bagi untuk 5 petak: 75 ÷ 5 = 15 liter."
+                },
+                {
+                    category: "📰 Kertas Bekas Daur Ulang",
+                    story: "Tumpukan kertas bekas di Bank Sampah beratnya 160 kg. Setelah diambil 40 kg untuk kerajinan bubur kertas, datang lagi tambahan 30 kg dari ruang tata usaha. Berapa kg kertas bekas sekarang?",
+                    expression: "160 − 40 + 30 = ?",
+                    options: [150, 140, 160, 130],
+                    correct: 150,
+                    savedBottles: 110,
+                    explanation: "Hitung urut dari kiri: 160 − 40 = 120 kg. Ditambah 30 kg: 120 + 30 = 150 kg."
+                },
+                {
+                    category: "🐝 Madu Segar Taman Sekolah",
+                    story: "Sarang lebah Bibo di taman sekolah menghasilkan 4 botol besar madu murni. Tiap botol besar berisi 50 ml madu. Jika madu itu dituang ke dalam gelas kecil berukuran 10 ml, berapa gelas kecil yang terisi?",
+                    expression: "(4 × 50) ÷ 10 = ?",
+                    options: [20, 15, 25, 30],
+                    correct: 20,
+                    savedBottles: 90,
+                    explanation: "Kalikan dalam kurung: 4 × 50 = 200 ml. Bagi 10 ml: 200 ÷ 10 = 20 gelas kecil."
+                },
+                {
+                    category: "🪴 Pupuk Cair Organik (POC)",
+                    story: "Siswa membuat 9 botol Pupuk Organik Cair. Setiap botol membutuhkan 20 gram gula merah. Jika persediaan gula merah di laboratorium ada 200 gram, berapa gram sisa gula merah?",
+                    expression: "200 − (9 × 20) = ?",
+                    options: [20, 30, 15, 25],
+                    correct: 20,
+                    savedBottles: 105,
+                    explanation: "Kalikan kebutuhan gula: 9 × 20 = 180 gram. Sisa gula merah: 200 − 180 = 20 gram."
+                },
+                {
+                    category: "🍽️ Gelas Stainless Kantin Sekolah",
+                    story: "Kantin sekolah memiliki 6 rak gelas stainless anti-plastik. Tiap rak berisi 30 gelas. Hari ini koperasi sekolah menyumbang lagi 45 gelas baru. Berapa total gelas stainless kantin?",
+                    expression: "(6 × 30) + 45 = ?",
+                    options: [225, 215, 235, 205],
+                    correct: 225,
+                    savedBottles: 140,
+                    explanation: "Hitung isi 6 rak: 6 × 30 = 180 gelas. Tambahkan sumbangan: 180 + 45 = 225 gelas."
+                },
+                {
+                    category: "🍂 Kompos Ranting & Daun Taman",
+                    story: "Sebanyak 140 kg kompos matang dimasukkan ke dalam karung. Sebanyak 50 kg digunakan sendiri untuk taman sekolah, dan sisanya dijual ke 9 wali murid sama rata. Berapa kg kompos yang dibeli tiap wali murid?",
+                    expression: "(140 − 50) ÷ 9 = ?",
+                    options: [10, 9, 12, 15],
+                    correct: 10,
+                    savedBottles: 95,
+                    explanation: "Kurangi di dalam kurung dulu: 140 − 50 = 90 kg. Lalu bagi kepada 9 orang: 90 ÷ 9 = 10 kg."
+                },
+                {
+                    category: "🧴 Stiker Nama Botol Tumbler",
+                    story: "Bibo mencetak 10 lembar stiker nama untuk botol minum siswa. Tiap lembar berisi 14 stiker. Setelah dibagikan kepada 115 siswa, berapa stiker yang masih tersisa?",
+                    expression: "(10 × 14) − 115 = ?",
+                    options: [25, 20, 30, 35],
+                    correct: 25,
+                    savedBottles: 115,
+                    explanation: "Kalikan jumlah stiker: 10 × 14 = 140 stiker. Dikurangi 115 siswa: 140 − 115 = 25 stiker."
+                },
+                {
+                    category: "🏆 Bonus Poin Agen Cilik",
+                    story: "Regu Piket Melati mengumpulkan 125 Poin Daun di minggu pertama dan 175 Poin Daun di minggu kedua. Karena menang lomba kebersihan, poin mereka dilipatgandakan 2 kali lipat! Berapa total poin Regu Melati?",
+                    expression: "(125 + 175) × 2 = ?",
+                    options: [600, 500, 550, 650],
+                    correct: 600,
+                    savedBottles: 160,
+                    explanation: "Jumlahkan dalam kurung terlebih dahulu: 125 + 175 = 300 poin. Kalikan 2: 300 × 2 = 600 Poin Daun!"
+                }
+            ],
+            medium: [
+                {
+                    category: "💧 Stasiun Pengisian Galon Sekolah",
+                    story: "Stasiun air minum sekolah menyediakan 4 galon besar berisi total 76.000 ml air. Jika 120 siswa mengisi tumbler mereka masing-masing sebanyak 500 ml, berapa ml sisa air di stasiun pengisian?",
+                    expression: "76.000 − (120 × 500) = ?",
+                    options: [16000, 14000, 18000, 12000],
+                    correct: 16000,
+                    savedBottles: 150,
+                    explanation: "Hitung air yang diisi ke tumbler dalam kurung: 120 × 500 = 60.000 ml. Sisa air: 76.000 − 60.000 = 16.000 ml."
+                },
+                {
+                    category: "♻️ Tabungan Bank Sampah Kelas 5",
+                    story: "Kelas 5 menyetorkan 125 kg botol plastik dengan nilai Rp2.000 per kg, serta kardus bekas senilai Rp50.000. Berapa rupiah total tabungan Bank Sampah Kelas 5 bulan ini?",
+                    expression: "(125 × 2.000) + 50.000 = ?",
+                    options: [300000, 250000, 325000, 275000],
+                    correct: 300000,
+                    savedBottles: 180,
+                    explanation: "Mesin cacah perkalian dulu: 125 × 2.000 = 250.000. Tambahkan hasil kardus: 250.000 + 50.000 = Rp300.000."
+                },
+                {
+                    category: "🌱 Pupuk Kompos Kebun Sekolah",
+                    story: "Mesin kompos sekolah mengolah 1.200 kg daun organik ditambah 600 kg sisa sayur kantin. Setelah matang, pupuk itu dikemas ke dalam 90 kantong sama berat. Berapa kg berat tiap kantong kompos?",
+                    expression: "(1.200 + 600) ÷ 90 = ?",
+                    options: [20, 18, 25, 30],
+                    correct: 20,
+                    savedBottles: 140,
+                    explanation: "Wadah tanda kurung dikerjakan paling awal: 1.200 + 600 = 1.800 kg. Kemudian dibagi 90 kantong: 1.800 ÷ 90 = 20 kg."
+                },
+                {
+                    category: "🧴 Kampanye G-Plast Free Kecamatan",
+                    story: "Sebanyak 6 SD di Kecamatan Sidoharjo mengikuti gerakan Bibo Bawa Tumbler. Tiap SD menghemat 450 botol plastik per minggu. Jika dikurangi 200 botol yang rusak saat pendataan, berapa botol bersih yang berhasil dihemat?",
+                    expression: "(6 × 450) − 200 = ?",
+                    options: [2500, 2400, 2600, 2700],
+                    correct: 2500,
+                    savedBottles: 250,
+                    explanation: "Kalikan dulu: 6 × 450 = 2.700 botol. Kemudian dikurangi 200: 2.700 − 200 = 2.500 botol plastik!"
+                },
+                {
+                    category: "🥫 Daur Ulang Kaleng & Kardus",
+                    story: "Bank Sampah mengumpulkan 850 kaleng logam di minggu pertama. Minggu kedua terkumpul 4 kotak besar yang masing-masing berisi 150 kaleng. Berapa jumlah seluruh kaleng logam sekarang?",
+                    expression: "850 + (4 × 150) = ?",
+                    options: [1450, 1350, 1550, 1250],
+                    correct: 1450,
+                    savedBottles: 160,
+                    explanation: "Ingat KUKABATAKU! Kerjakan perkalian dulu: 4 × 150 = 600. Lalu jumlahkan: 850 + 600 = 1.450 kaleng."
+                },
+                {
+                    category: "🌡️ Suhu Komposter Organik (Bilangan Bulat)",
+                    story: "Pagi hari suhu di dalam drum komposter organik adalah 28°C. Siang hari suhunya naik 12°C karena proses fermentasi, lalu sore hari turun 6°C setelah disiram air. Berapa derajat suhu komposter sore hari?",
+                    expression: "28 + 12 − 6 = ?",
+                    options: [34, 32, 36, 30],
+                    correct: 34,
+                    savedBottles: 130,
+                    explanation: "Hitung urut dari kiri: 28 + 12 = 40°C. Sore hari turun 6°C: 40 − 6 = 34°C."
+                },
+                {
+                    category: "📦 Pengiriman Kardus ke Pabrik Kertas",
+                    story: "Gudang Bank Sampah memiliki 2.400 kg kardus. Datang lagi setoran dari 5 desa yang masing-masing menyetor 300 kg. Jika 1.900 kg langsung diangkut truk, berapa kg sisa kardus di gudang?",
+                    expression: "2.400 + (5 × 300) − 1.900 = ?",
+                    options: [2000, 1800, 2100, 2200],
+                    correct: 2000,
+                    savedBottles: 190,
+                    explanation: "Kalikan dalam kurung: 5 × 300 = 1.500 kg. Jumlahkan: 2.400 + 1.500 = 3.900 kg. Kurangi truk: 3.900 − 1.900 = 2.000 kg."
+                },
+                {
+                    category: "🧴 Penghematan Uang Jajan Tumbler",
+                    story: "Dengan membawa botol minum sendiri, seorang siswa menghemat Rp3.000 per hari. Dalam 20 hari sekolah, uang hemat itu dibelikan buku cerita seharga Rp25.000. Berapa sisa uang tabungan siswa tersebut?",
+                    expression: "(20 × 3.000) − 25.000 = ?",
+                    options: [35000, 30000, 40000, 45000],
+                    correct: 35000,
+                    savedBottles: 170,
+                    explanation: "Hitung total penghematan: 20 × 3.000 = Rp60.000. Kurangi harga buku: 60.000 − 25.000 = Rp35.000."
+                },
+                {
+                    category: "🪴 Pot Gantung Taman Adiwiyata",
+                    story: "Tersedia 1.500 botol plastik di Bank Sampah. Sebanyak 300 botol dipotong menjadi tempat pensil, dan sisanya dibagikan rata kepada 12 kelas untuk dibuat kebun vertikal. Berapa botol yang diterima tiap kelas?",
+                    expression: "(1.500 − 300) ÷ 12 = ?",
+                    options: [100, 90, 110, 120],
+                    correct: 100,
+                    savedBottles: 160,
+                    explanation: "Kerjakan tanda kurung: 1.500 − 300 = 1.200 botol. Bagi ke 12 kelas: 1.200 ÷ 12 = 100 botol per kelas."
+                },
+                {
+                    category: "🍽️ Kantin Sehat Tanpa Styrofoam",
+                    story: "Setiap hari kantin sekolah berhasil menghindari pemakaian 350 bungkus styrofoam. Dalam 6 hari sekolah, ditambah 400 bungkus yang dihemat saat acara rapat komite, berapa total styrofoam yang berhasil dicegah?",
+                    expression: "(350 × 6) + 400 = ?",
+                    options: [2500, 2400, 2600, 2300],
+                    correct: 2500,
+                    savedBottles: 210,
+                    explanation: "Kalikan 6 hari: 350 × 6 = 2.100 bungkus. Tambahkan acara komite: 2.100 + 400 = 2.500 bungkus."
+                },
+                {
+                    category: "🥫 Tabungan Kaleng Aluminium",
+                    story: "Harga daur ulang kaleng aluminium adalah Rp12.000 per kg. Kelompok Bibo berhasil mengumpulkan 15 kg kaleng, lalu uangnya dibagi rata untuk mengisi kas 6 regu piket. Berapa rupiah yang diterima tiap regu?",
+                    expression: "(15 × 12.000) ÷ 6 = ?",
+                    options: [30000, 25000, 35000, 20000],
+                    correct: 30000,
+                    savedBottles: 175,
+                    explanation: "Kalikan hasil penjualan: 15 × 12.000 = Rp180.000. Bagi ke 6 regu: 180.000 ÷ 6 = Rp30.000."
+                },
+                {
+                    category: "🍂 Produksi Humus Daun Bambu",
+                    story: "Sebanyak 8 lubang biopori besar masing-masing menghasilkan 125 kg humus subur. Jika ditambah 500 kg humus dari rumah kompos utama, berapa kg total humus yang siap memupuk taman?",
+                    expression: "(8 × 125) + 500 = ?",
+                    options: [1500, 1400, 1600, 1250],
+                    correct: 1500,
+                    savedBottles: 155,
+                    explanation: "Kalikan hasil biopori: 8 × 125 = 1.000 kg. Tambahkan rumah kompos: 1.000 + 500 = 1.500 kg."
+                },
+                {
+                    category: "❄️ Pendingin Minuman Herbal (Bilangan Bulat)",
+                    story: "Lemari pendingin kantin sehat bersuhu −2°C. Saat listrik dipadamkan untuk penghematan energi, suhunya naik 3°C setiap jam selama 4 jam. Berapa suhu lemari pendingin sekarang?",
+                    expression: "−2 + (3 × 4) = ?",
+                    options: [10, 12, 8, -10],
+                    correct: 10,
+                    savedBottles: 165,
+                    explanation: "Hitung kenaikan suhu dalam kurung: 3 × 4 = 12°C. Jumlahkan dengan suhu awal: −2 + 12 = 10°C."
+                },
+                {
+                    category: "💧 Tandon Air Hujan Sekolah",
+                    story: "Tandon penampung air hujan berisi 4.500 liter air. Digunakan untuk menyiram kebun 1.200 liter, lalu turun hujan deras yang menambah 1.700 liter air. Berapa liter isi tandon sekarang?",
+                    expression: "4.500 − 1.200 + 1.700 = ?",
+                    options: [5000, 4800, 5200, 4900],
+                    correct: 5000,
+                    savedBottles: 185,
+                    explanation: "Kerjakan urut dari kiri: 4.500 − 1.200 = 3.300 liter. Ditambah air hujan: 3.300 + 1.700 = 5.000 liter."
+                },
+                {
+                    category: "🛍️ Kampanye Kantong Belanja Anyaman",
+                    story: "Koperasi sekolah memesan 12 ikat tas anyaman purun. Tiap ikat berisi 25 tas. Dalam sehari sudah terjual 180 tas kepada wali murid. Berapa tas anyaman yang masih tersedia?",
+                    expression: "(12 × 25) − 180 = ?",
+                    options: [120, 110, 130, 140],
+                    correct: 120,
+                    savedBottles: 150,
+                    explanation: "Hitung total tas: 12 × 25 = 300 tas. Kurangi yang terjual: 300 − 180 = 120 tas."
+                },
+                {
+                    category: "♻️ Poin Daun Lomba Kelas Bersih",
+                    story: "Kelas 5 memperoleh 600 Poin Daun. Mereka mendapat bonus 3 medali hijau (@ 150 poin), tetapi dikurangi 50 poin karena ada keran air yang lupa dimatikan. Berapa total Poin Daun Kelas 5?",
+                    expression: "600 + (3 × 150) − 50 = ?",
+                    options: [1000, 950, 1050, 900],
+                    correct: 1000,
+                    savedBottles: 200,
+                    explanation: "Kalikan bonus medali: 3 × 150 = 450. Jumlahkan: 600 + 450 = 1.050. Kurangi penalti: 1.050 − 50 = 1.000 poin."
+                },
+                {
+                    category: "📰 Sumbangan Kertas Buku Tulis",
+                    story: "Dari kardus dan kertas daur ulang, pabrik kertas memberikan 1.600 buku tulis baru. Sebanyak 400 buku disimpan di perpustakaan, dan sisanya dibagikan kepada 8 SD sama rata. Berapa buku yang diterima tiap SD?",
+                    expression: "(1.600 − 400) ÷ 8 = ?",
+                    options: [150, 140, 160, 125],
+                    correct: 150,
+                    savedBottles: 175,
+                    explanation: "Kurangi di dalam kurung: 1.600 − 400 = 1.200 buku. Bagi ke 8 SD: 1.200 ÷ 8 = 150 buku per SD."
+                },
+                {
+                    category: "🧴 Sedotan Bambu Ramah Lingkungan",
+                    story: "Pengrajin desa mengirim 9 kotak sedotan bambu ke kantin sekolah. Tiap kotak berisi 120 sedotan bambu. Jika ditambah 220 sedotan stainless milik kantin, berapa total sedotan ramah lingkungan yang ada?",
+                    expression: "(9 × 120) + 220 = ?",
+                    options: [1300, 1280, 1320, 1200],
+                    correct: 1300,
+                    savedBottles: 190,
+                    explanation: "Kalikan dalam kurung: 9 × 120 = 1.080 sedotan. Tambahkan 220: 1.080 + 220 = 1.300 sedotan."
+                },
+                {
+                    category: "🌳 Penanaman Pohon Sabuk Hijau",
+                    story: "Untuk menghijaukan bukit dekat sekolah, disiapkan 2.000 bibit pohon jati dan mahoni. Selama 7 hari, warga dan siswa menanam 250 pohon per hari. Berapa bibit pohon yang belum ditanam?",
+                    expression: "2.000 − (7 × 250) = ?",
+                    options: [250, 300, 200, 350],
+                    correct: 250,
+                    savedBottles: 180,
+                    explanation: "Hitung pohon yang sudah ditanam: 7 × 250 = 1.750 pohon. Sisa bibit: 2.000 − 1.750 = 250 bibit."
+                },
+                {
+                    category: "🐝 Panen Madu Klanceng Sekolah",
+                    story: "Kotak budidaya lebah Bibo menghasilkan 1.800 ml madu di bulan Juni dan 1.400 ml di bulan Juli. Seluruh madu dikemas ke dalam botol kaca ukuran 80 ml. Berapa botol kaca madu yang dihasilkan?",
+                    expression: "(1.800 + 1.400) ÷ 80 = ?",
+                    options: [40, 35, 45, 50],
+                    correct: 40,
+                    savedBottles: 195,
+                    explanation: "Jumlahkan hasil madu dalam kurung: 1.800 + 1.400 = 3.200 ml. Bagi 80 ml: 3.200 ÷ 80 = 40 botol kaca."
+                },
+                {
+                    category: "🔋 Pengumpulan Baterai Bekas (B3)",
+                    story: "Agar tidak mencemari tanah, Bibo membuat kotak khusus limbah baterai bekas. Terkumpul 14 kotak kecil yang masing-masing berisi 25 baterai, dikurangi 50 baterai yang sudah dibawa dinas lingkungan hidup. Berapa baterai di kotak penyimpanan?",
+                    expression: "(14 × 25) − 50 = ?",
+                    options: [300, 280, 320, 350],
+                    correct: 300,
+                    savedBottles: 160,
+                    explanation: "Kalikan isi 14 kotak: 14 × 25 = 350 baterai. Dikurangi 50 baterai: 350 − 50 = 300 baterai."
+                },
+                {
+                    category: "🪴 Penjualan Kompos Koperasi Siswa",
+                    story: "Koperasi menjual 45 bungkus kompos di pagi hari dan 35 bungkus di sore hari. Jika harga tiap bungkus kompos Rp5.000, berapa rupiah total pendapatan koperasi hari itu?",
+                    expression: "(45 + 35) × 5.000 = ?",
+                    options: [400000, 350000, 450000, 380000],
+                    correct: 400000,
+                    savedBottles: 210,
+                    explanation: "Jumlahkan bungkus kompos dalam kurung: 45 + 35 = 80 bungkus. Kalikan harga: 80 × 5.000 = Rp400.000."
+                },
+                {
+                    category: "🧴 Botol Plastik Taman Baca",
+                    story: "Program 'Bayar Membaca dengan Botol Plastik' mengumpulkan 640 botol di hari Senin dan 560 botol di hari Selasa. Jika setiap karung besar memuat 60 botol, berapa karung yang dibutuhkan?",
+                    expression: "(640 + 560) ÷ 60 = ?",
+                    options: [20, 18, 22, 24],
+                    correct: 20,
+                    savedBottles: 200,
+                    explanation: "Jumlahkan botol dalam kurung: 640 + 560 = 1.200 botol. Bagi kapasitas karung: 1.200 ÷ 60 = 20 karung."
+                },
+                {
+                    category: "📉 Selisih Suhu Puncak & Lembah (Bilangan Bulat)",
+                    story: "Air mata air pegunungan untuk isi ulang tumbler memiliki suhu 15°C. Saat didinginkan di mesin dispenser, suhunya turun 18°C, lalu naik kembali 7°C saat dituang ke botol. Berapa derajat suhu air itu?",
+                    expression: "15 − 18 + 7 = ?",
+                    options: [4, -4, 6, 10],
+                    correct: 4,
+                    savedBottles: 170,
+                    explanation: "Hitung bilangan bulat dari kiri: 15 − 18 = −3°C. Kemudian naik 7°C: −3 + 7 = 4°C."
+                },
+                {
+                    category: "🏆 Rekor Hemat Plastik Semester Ganjil",
+                    story: "Setiap bulan sekolah berhasil mengurangi 1.250 sampah plastik. Dalam 4 bulan, ditambah 1.000 plastik yang dihemat saat perkemahan Sabtu-Minggu, berapa total plastik yang berhasil dikurangi?",
+                    expression: "(1.250 × 4) + 1.000 = ?",
+                    options: [6000, 5500, 6500, 5000],
+                    correct: 6000,
+                    savedBottles: 240,
+                    explanation: "Kalikan 4 bulan dulu: 1.250 × 4 = 5.000 plastik. Tambahkan kemah: 5.000 + 1.000 = 6.000 plastik!"
+                }
+            ],
+            hard: [
+                {
+                    category: "🏆 Tantangan Agen Adiwiyata Kabupaten",
+                    story: "Selama 20 hari sekolah efektif, siswa menghemat 150 botol plastik per hari dan guru menghemat 30 botol per hari. Jika 400 botol lama di gudang ikut didaur ulang, berapa total rekor botol sekolah?",
+                    expression: "20 × (150 + 30) + 400 = ?",
+                    options: [4000, 3600, 4200, 3800],
+                    correct: 4000,
+                    savedBottles: 300,
+                    explanation: "1) Kurung dulu: (150 + 30) = 180. 2) Mesin kali: 20 × 180 = 3.600. 3) Tambah akhir: 3.600 + 400 = 4.000 botol!"
+                },
+                {
+                    category: "💰 Dana Sosial Bank Sampah Bibo",
+                    story: "Penjualan botol plastik menghasilkan Rp180.000 dan kardus menghasilkan Rp120.000. Seluruh uang tersebut dibelikan bibit tanaman pucuk merah seharga Rp15.000 per pohon. Berapa pohon yang berhasil dibeli?",
+                    expression: "(180.000 + 120.000) ÷ 15.000 = ?",
+                    options: [20, 15, 25, 30],
+                    correct: 20,
+                    savedBottles: 220,
+                    explanation: "1) Kurung prioritas utama: 180.000 + 120.000 = Rp300.000. 2) Bagi harga per bibit: 300.000 ÷ 15.000 = 20 pohon!"
+                },
+                {
+                    category: "❄️ Eksperimen Es & Air Tumbler (Bilangan Bulat)",
+                    story: "Air dingin di dalam tumbler insulasi Bibo bersuhu −4°C (4 derajat di bawah nol). Setelah dituang air hangat, suhunya naik sebesar (6 × 3)°C. Berapa suhu air di dalam tumbler Bibo sekarang?",
+                    expression: "−4 + (6 × 3) = ?",
+                    options: [14, 12, 22, -14],
+                    correct: 14,
+                    savedBottles: 240,
+                    explanation: "Kerjakan perkalian: 6 × 3 = 18°C. Lalu jumlahkan bilangan bulat: −4 + 18 = 14°C."
+                },
+                {
+                    category: "🚛 Pengiriman Truk Daur Ulang",
+                    story: "Gudang induk memiliki 5.000 botol plastik. Sebanyak 8 sekolah menyetor lagi masing-masing 250 botol. Kemudian 3.500 botol diangkut truk ke pabrik daur ulang. Berapa botol yang tersisa di gudang induk?",
+                    expression: "5.000 + (8 × 250) − 3.500 = ?",
+                    options: [3500, 4000, 3000, 4500],
+                    correct: 3500,
+                    savedBottles: 280,
+                    explanation: "1) Perkalian: 8 × 250 = 2.000. 2) Penjumlahan: 5.000 + 2.000 = 7.000. 3) Pengurangan: 7.000 − 3.500 = 3.500 botol."
+                },
+                {
+                    category: "🪴 Proyek 1.000 Eco-Brick Sekolah",
+                    story: "Target sekolah adalah membuat 1.000 kursi Eco-Brick. Saat ini sudah selesai 280 buah. Sisanya akan dikerjakan oleh 6 kelas secara merata. Berapa Eco-Brick yang harus dibuat oleh setiap kelas?",
+                    expression: "(1.000 − 280) ÷ 6 = ?",
+                    options: [120, 110, 130, 140],
+                    correct: 120,
+                    savedBottles: 260,
+                    explanation: "1) Kurung dulu: 1.000 − 280 = 720 Eco-Brick. 2) Dibagi 6 kelas: 720 ÷ 6 = 120 Eco-Brick per kelas."
+                },
+                {
+                    category: "📉 Poin Penalti Sampah Plastik (Bilangan Bulat)",
+                    story: "Tim Piket Kelas memiliki modal 250 Poin Daun. Mereka mendapat tambahan 4 kantong kompos (tiap kantong +50 poin), tetapi dikurangi 3 kali penalti sampah plastik (@ −20 poin). Berapa total Poin Daun mereka?",
+                    expression: "250 + (4 × 50) + (3 × (−20)) = ?",
+                    options: [390, 410, 450, 370],
+                    correct: 390,
+                    savedBottles: 290,
+                    explanation: "1) Hitung kurung pertama: 4 × 50 = 200. 2) Hitung kurung kedua: 3 × (−20) = −60. 3) Total: 250 + 200 − 60 = 390 Poin Daun!"
+                },
+                {
+                    category: "🏭 Mesin Pencacah Plastik Otomatis",
+                    story: "Mesin pencacah Bank Sampah Pusat mampu mengolah 450 kg plastik per jam. Mesin bekerja selama 6 jam di pagi hari dan 4 jam di sore hari. Jika 1.500 kg hasil cacahan langsung dicetak menjadi pot bunga, berapa kg sisa cacahan?",
+                    expression: "450 × (6 + 4) − 1.500 = ?",
+                    options: [3000, 2800, 3200, 3500],
+                    correct: 3000,
+                    savedBottles: 310,
+                    explanation: "1) Kurung waktu kerja: 6 + 4 = 10 jam. 2) Kalikan kapasitas: 450 × 10 = 4.500 kg. 3) Kurangi 1.500 kg: 4.500 − 1.500 = 3.000 kg."
+                },
+                {
+                    category: "💧 Penghematan Air & Galon Tahunan",
+                    story: "Dalam setahun, 150 siswa membawa tumbler sehingga masing-masing menghemat 200 botol plastik. Selain itu, stasiun air sekolah menghemat 5.000 gelas plastik. Berapa total wadah plastik yang berhasil dicegah?",
+                    expression: "(150 × 200) + 5.000 = ?",
+                    options: [35000, 30000, 40000, 25000],
+                    correct: 35000,
+                    savedBottles: 350,
+                    explanation: "1) Kalikan dalam kurung: 150 × 200 = 30.000 botol. 2) Tambahkan gelas plastik: 30.000 + 5.000 = 35.000 wadah plastik!"
+                },
+                {
+                    category: "📦 Koperasi Daur Ulang Se-Kecamatan",
+                    story: "Sebanyak 12 sekolah mengumpulkan masing-masing 350 kg kardus dan 150 kg kertas putih. Seluruh kertas dan kardus itu diangkut menggunakan 6 truk sama rata. Berapa kg muatan setiap truk?",
+                    expression: "12 × (350 + 150) ÷ 6 = ?",
+                    options: [1000, 900, 1200, 800],
+                    correct: 1000,
+                    savedBottles: 320,
+                    explanation: "1) Kurung dulu: 350 + 150 = 500 kg. 2) Kalikan 12 sekolah: 12 × 500 = 6.000 kg. 3) Bagi 6 truk: 6.000 ÷ 6 = 1.000 kg per truk."
+                },
+                {
+                    category: "🌡️ Ruang Penyimpanan Bibit Kultur (Bilangan Bulat)",
+                    story: "Suhu awal ruang inkubasi bibit tanaman langka adalah −6°C. Petugas menaikkan suhu sebesar 4°C setiap jam selama 5 jam, lalu menurunkannya kembali 2°C agar stabil. Berapa derajat suhu ruang itu sekarang?",
+                    expression: "−6 + (4 × 5) − 2 = ?",
+                    options: [12, 14, 10, 16],
+                    correct: 12,
+                    savedBottles: 270,
+                    explanation: "1) Kalikan dalam kurung: 4 × 5 = 20°C. 2) Hitung dari kiri: −6 + 20 = 14°C. 3) Kurangi 2°C: 14 − 2 = 12°C."
+                },
+                {
+                    category: "💰 Beasiswa Tabungan Sampah Plastik",
+                    story: "Dana Bank Sampah terkumpul Rp1.200.000 dari botol plastik dan Rp800.000 dari kaleng logam. Setelah dikurangi Rp200.000 untuk membeli karung, sisanya diberikan sebagai beasiswa kepada 9 siswa teladan. Berapa rupiah beasiswa tiap siswa?",
+                    expression: "(1.200.000 + 800.000 − 200.000) ÷ 9 = ?",
+                    options: [200000, 180000, 220000, 250000],
+                    correct: 200000,
+                    savedBottles: 340,
+                    explanation: "1) Hitung dalam kurung: 1.200.000 + 800.000 − 200.000 = Rp1.800.000. 2) Bagi 9 siswa: 1.800.000 ÷ 9 = Rp200.000."
+                },
+                {
+                    category: "🍂 Produksi Pupuk Organik Gabungan",
+                    story: "Terdapat 25 drum komposter di sekolah. Tiap drum menghasilkan 80 kg pupuk padat. Jika 400 kg dipakai untuk kebun sekolah dan sisanya dikemas dalam karung 20 kg, berapa karung yang siap dijual?",
+                    expression: "((25 × 80) − 400) ÷ 20 = ?",
+                    options: [80, 75, 85, 90],
+                    correct: 80,
+                    savedBottles: 295,
+                    explanation: "1) Kalikan hasil drum: 25 × 80 = 2.000 kg. 2) Kurangi pemakaian sekolah: 2.000 − 400 = 1.600 kg. 3) Bagi 20 kg: 1.600 ÷ 20 = 80 karung."
+                },
+                {
+                    category: "🧴 Gerakan Seribu Tumbler Wonogiri",
+                    story: "Target kampanye Bibo adalah membagikan 5.000 tumbler. Tahap pertama dibagikan ke 15 SD masing-masing 200 tumbler. Tahap kedua dibagikan lagi 1.250 tumbler. Berapa tumbler yang masih tersisa di panitia?",
+                    expression: "5.000 − (15 × 200) − 1.250 = ?",
+                    options: [750, 850, 650, 800],
+                    correct: 750,
+                    savedBottles: 330,
+                    explanation: "1) Kalikan tahap pertama: 15 × 200 = 3.000. 2) Kurangi dari 5.000: 5.000 − 3.000 = 2.000. 3) Kurangi tahap kedua: 2.000 − 1.250 = 750 tumbler."
+                },
+                {
+                    category: "🥫 Lomba Kreasi Robot Kaleng Bekas",
+                    story: "Sebanyak 16 tim mengikuti lomba membuat robot dari kaleng bekas. Tiap tim menggunakan 25 kaleng besar dan 15 kaleng kecil. Berapa total kaleng yang berhasil disulap menjadi karya seni oleh seluruh tim?",
+                    expression: "16 × (25 + 15) = ?",
+                    options: [640, 600, 680, 560],
+                    correct: 640,
+                    savedBottles: 250,
+                    explanation: "1) Jumlahkan kaleng per tim dalam kurung: 25 + 15 = 40 kaleng. 2) Kalikan 16 tim: 16 × 40 = 640 kaleng!"
+                },
+                {
+                    category: "🌊 Pembersihan Sungai & Saluran Air",
+                    story: "Relawan Bibo mengangkat 1.450 kg sampah plastik dari sungai di hari Sabtu dan 1.050 kg di hari Minggu. Setelah dikeringkan, beratnya menyusut 500 kg. Jika sisanya diolah oleh 4 mesin daur ulang, berapa kg bagian tiap mesin?",
+                    expression: "(1.450 + 1.050 − 500) ÷ 4 = ?",
+                    options: [500, 450, 550, 600],
+                    correct: 500,
+                    savedBottles: 310,
+                    explanation: "1) Hitung dalam kurung: 1.450 + 1.050 − 500 = 2.000 kg. 2) Bagi ke 4 mesin: 2.000 ÷ 4 = 500 kg per mesin."
+                },
+                {
+                    category: "⚡ Penghematan Listrik Panel Surya Sekolah",
+                    story: "Panel surya atap sekolah menghasilkan energi setara penghematan Rp45.000 per hari. Dalam 30 hari, dikurangi biaya perawatan rutin Rp150.000, berapa rupiah penghematan bersih sekolah bulan itu?",
+                    expression: "(30 × 45.000) − 150.000 = ?",
+                    options: [1200000, 1150000, 1250000, 1300000],
+                    correct: 1200000,
+                    savedBottles: 280,
+                    explanation: "1) Kalikan 30 hari: 30 × 45.000 = Rp1.350.000. 2) Kurangi perawatan: 1.350.000 − 150.000 = Rp1.200.000."
+                },
+                {
+                    category: "📉 Neraca Karbon Kebun Sekolah (Bilangan Bulat)",
+                    story: "Emisi asap kendaraan di sekitar jalan tercatat −120 poin. Penanaman 8 pohon trembesi besar berhasil menyerap polusi dan memberi nilai positif masing-masing +25 poin. Berapa saldo bersih poin udara bersih sekarang?",
+                    expression: "−120 + (8 × 25) = ?",
+                    options: [80, -80, 100, 60],
+                    correct: 80,
+                    savedBottles: 275,
+                    explanation: "1) Kalikan serapan 8 pohon: 8 × 25 = 200 poin. 2) Jumlahkan bilangan bulat: −120 + 200 = +80 poin udara bersih!"
+                },
+                {
+                    category: "🛍️ Produksi Tas Daur Ulang Kemasan Kopi",
+                    story: "Satu tas anyaman cantik membutuhkan 60 bungkus plastik kemasan. Ibu-ibu PKK dan siswa berhasil mengumpulkan 4.200 bungkus di bulan pertama dan 1.800 bungkus di bulan kedua. Berapa tas anyaman yang dapat dibuat?",
+                    expression: "(4.200 + 1.800) ÷ 60 = ?",
+                    options: [100, 90, 110, 120],
+                    correct: 100,
+                    savedBottles: 300,
+                    explanation: "1) Jumlahkan bungkus dalam kurung: 4.200 + 1.800 = 6.000 bungkus. 2) Bagi 60: 6.000 ÷ 60 = 100 tas anyaman."
+                },
+                {
+                    category: "🪴 Kebun Gizi Sekolah Adiwiyata",
+                    story: "Terdapat 18 bedeng tanaman sayur organik. Tiap bedeng ditanami 40 bibit sawi. Sayangnya 60 bibit rusak karena hujan deras, namun siswa segera menyulam (menambah) 180 bibit baru. Berapa total tanaman sawi sekarang?",
+                    expression: "(18 × 40) − 60 + 180 = ?",
+                    options: [840, 800, 820, 860],
+                    correct: 840,
+                    savedBottles: 265,
+                    explanation: "1) Kalikan dalam kurung: 18 × 40 = 720 bibit. 2) Kurangi yang rusak: 720 − 60 = 660. 3) Tambah sulaman: 660 + 180 = 840 sawi."
+                },
+                {
+                    category: "💧 Distribusi Galon Air Sehat",
+                    story: "Truk air bersih mengirim 240 galon ke 8 sekolah sama rata. Setiap galon berisi 19 liter air minum untuk mengisi tumbler siswa. Berapa liter air minum yang diterima oleh setiap sekolah?",
+                    expression: "(240 ÷ 8) × 19 = ?",
+                    options: [570, 550, 590, 540],
+                    correct: 570,
+                    savedBottles: 290,
+                    explanation: "1) Bagi galon ke 8 sekolah: 240 ÷ 8 = 30 galon per sekolah. 2) Kalikan 19 liter: 30 × 19 = 570 liter."
+                },
+                {
+                    category: "🐝 Panen Raya Madu & Propolis Bibo",
+                    story: "Dari 12 koloni lebah taman, masing-masing menghasilkan 250 ml madu. Sebanyak 600 ml madu dibagikan gratis saat Posyandu Desa, dan sisanya dijual dalam botol 120 ml. Berapa botol madu yang terjual?",
+                    expression: "((12 × 250) − 600) ÷ 120 = ?",
+                    options: [20, 18, 22, 25],
+                    correct: 20,
+                    savedBottles: 285,
+                    explanation: "1) Kalikan hasil 12 koloni: 12 × 250 = 3.000 ml. 2) Kurangi Posyandu: 3.000 − 600 = 2.400 ml. 3) Bagi 120 ml: 2.400 ÷ 120 = 20 botol."
+                },
+                {
+                    category: "📦 Gudang Kertas & Kardus Kabupaten",
+                    story: "Gudang menampung 12.500 kg kertas bekas. Hari ini masuk lagi 15 mobil pikap yang masing-masing membawa 400 kg kertas, lalu 8.500 kg dikirim ke pabrik daur ulang. Berapa kg kertas di gudang sekarang?",
+                    expression: "12.500 + (15 × 400) − 8.500 = ?",
+                    options: [10000, 9500, 10500, 11000],
+                    correct: 10000,
+                    savedBottles: 340,
+                    explanation: "1) Kalikan muatan 15 pikap: 15 × 400 = 6.000 kg. 2) Jumlahkan: 12.500 + 6.000 = 18.500 kg. 3) Kurangi pabrik: 18.500 − 8.500 = 10.000 kg."
+                },
+                {
+                    category: "🌡️ Fermentasi Pupuk Bokashi (Bilangan Bulat)",
+                    story: "Selisih suhu adonan kompos Bokashi terhadap suhu kamar dicatat sebagai −8°C. Setelah diberi cairan aktivator organik, suhunya meningkat (5 × 6)°C, lalu didinginkan 10°C sebelum dikemas. Berapa selisih suhu akhirnya?",
+                    expression: "−8 + (5 × 6) − 10 = ?",
+                    options: [12, 10, 14, -12],
+                    correct: 12,
+                    savedBottles: 260,
+                    explanation: "1) Kalikan dalam kurung: 5 × 6 = 30°C. 2) Jumlahkan dari kiri: −8 + 30 = 22°C. 3) Kurangi 10°C: 22 − 10 = 12°C."
+                },
+                {
+                    category: "🧴 Rekor Poin Daun Nasional",
+                    story: "Tim Adiwiyata mengumpulkan 2.500 Poin Daun. Dalam babak final, mereka menyelesaikan 8 proyek daur ulang (@ 350 poin) dan 4 proyek hemat air (@ 175 poin). Berapa total Poin Daun mereka di babak final?",
+                    expression: "2.500 + (8 × 350) + (4 × 175) = ?",
+                    options: [6000, 5800, 6200, 5500],
+                    correct: 6000,
+                    savedBottles: 360,
+                    explanation: "1) Kurung pertama: 8 × 350 = 2.800. 2) Kurung kedua: 4 × 175 = 700. 3) Jumlahkan semua: 2.500 + 2.800 + 700 = 6.000 Poin Daun!"
+                },
+                {
+                    category: "🏆 Mahkota Agen Adiwiyata Bibo",
+                    story: "Sepanjang tahun ajaran, 25 sekolah di Kecamatan Sidoharjo masing-masing menyelamatkan 1.400 botol plastik dan 600 kaleng bekas. Jika seluruhnya dibagi ke dalam 50 kontainer daur ulang, berapa isi tiap kontainer?",
+                    expression: "25 × (1.400 + 600) ÷ 50 = ?",
+                    options: [1000, 900, 1100, 1200],
+                    correct: 1000,
+                    savedBottles: 400,
+                    explanation: "1) Kurung dulu: 1.400 + 600 = 2.000. 2) Kalikan 25 sekolah: 25 × 2.000 = 50.000. 3) Bagi 50 kontainer: 50.000 ÷ 50 = 1.000 buah per kontainer!"
+                }
+            ]
+        };
+
+        /* =========================================================================
+           3. STATE PERMAINAN & RENDERING BOTOL TUMBLER WARNA-WARNI
+           ========================================================================= */
+        let gameState = {
+            controlMode: 'touch', // 'touch' atau 'motion'
+            difficulty: 'easy',
+            questionPack: 'kilat5', // 'kilat5' (Soal 1-5), 'paket10a' (Soal 6-15), 'paket10b' (Soal 16-25)
+            questions: [],
+            currentIndex: 0,
+            score: 0,
+            savedBottles: 0,
+            lives: 3,
+            timer: 45,
+            timerInterval: null,
+            isPaused: false,
+            isAnswering: false,
+            history: []
+        };
+
+        const TUMBLER_THEMES = [
+            { label: 'A', name: 'Hijau Daun', bodyGrad: ['#22c55e', '#15803d'], stroke: '#166534', badge: 'bg-emerald-700' },
+            { label: 'B', name: 'Kuning Madu', bodyGrad: ['#facc15', '#ca8a04'], stroke: '#854d0e', badge: 'bg-amber-600' },
+            { label: 'C', name: 'Biru Langit', bodyGrad: ['#38bdf8', '#0284c7'], stroke: '#075985', badge: 'bg-sky-700' },
+            { label: 'D', name: 'Oranye Segar', bodyGrad: ['#fb923c', '#ea580c'], stroke: '#9a3412', badge: 'bg-orange-700' }
+        ];
+
+        // Memasang Maskot Bibo ke kontainer Splash dan Game
+        function mountBiboMascots() {
+            const tpl = document.getElementById('svg-bibo-template');
+            const splashBox = document.getElementById('splash-bibo-container');
+            const gameBox = document.getElementById('game-bibo-container');
+            if (tpl && splashBox) splashBox.innerHTML = tpl.innerHTML;
+            if (tpl && gameBox) gameBox.innerHTML = tpl.innerHTML;
+        }
+
+        function showScreen(screenId) {
+            ['screen-splash', 'screen-edu', 'screen-game', 'screen-result'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.classList.add('hidden');
+                    el.classList.remove('flex');
+                }
+            });
+            const target = document.getElementById(screenId);
+            if (target) {
+                target.classList.remove('hidden');
+                target.classList.add('flex');
+            }
+            if (screenId !== 'screen-game') {
+                clearInterval(gameState.timerInterval);
+            }
+        }
+
+        function selectControlMode(mode) {
+            AudioEngine.playClick();
+            gameState.controlMode = mode;
+            const btnTouch = document.getElementById('btn-mode-touch');
+            const btnMotion = document.getElementById('btn-mode-motion');
+            if (mode === 'touch') {
+                btnTouch.className = "p-3 rounded-xl border-2 border-emerald-500 bg-emerald-100/80 text-left transition-all flex items-center gap-3";
+                btnMotion.className = "p-3 rounded-xl border-2 border-slate-300 bg-white hover:bg-slate-50 text-left transition-all flex items-center gap-3";
+            } else {
+                btnMotion.className = "p-3 rounded-xl border-2 border-emerald-500 bg-emerald-100/80 text-left transition-all flex items-center gap-3";
+                btnTouch.className = "p-3 rounded-xl border-2 border-slate-300 bg-white hover:bg-slate-50 text-left transition-all flex items-center gap-3";
+            }
+        }
+
+        function selectDifficulty(diff) {
+            AudioEngine.playClick();
+            gameState.difficulty = diff;
+            ['easy', 'medium', 'hard'].forEach(d => {
+                const btn = document.getElementById('diff-' + d);
+                if (d === diff) {
+                    btn.className = "p-2.5 rounded-xl border-2 border-emerald-500 bg-emerald-100 text-center transition-all shadow-sm";
+                } else {
+                    btn.className = "p-2.5 rounded-xl border-2 border-slate-300 bg-white text-center transition-all";
+                }
+            });
+        }
+
+        function selectQuestionPack(pack) {
+            AudioEngine.playClick();
+            gameState.questionPack = pack;
+            ['kilat5', 'paket10a', 'paket10b'].forEach(p => {
+                const btn = document.getElementById('pack-' + p);
+                if (!btn) return;
+                if (p === pack) {
+                    btn.className = "p-2.5 rounded-xl border-2 border-amber-500 bg-amber-100 text-center transition-all shadow-sm";
+                } else {
+                    btn.className = "p-2.5 rounded-xl border-2 border-slate-300 bg-white text-center transition-all";
+                }
+            });
+        }
+
+        function formatNumberID(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+
+        function startGame() {
+            AudioEngine.playClick();
+            // Ambil 25 soal sesuai tingkat kesulitan, lalu bagi ke dalam 3 paket (5 soal kilat, 10 soal A, 10 soal B)
+            const fullLevelPool = QUESTION_BANK[gameState.difficulty];
+            let selectedSlice = [];
+
+            if (gameState.questionPack === 'kilat5') {
+                selectedSlice = fullLevelPool.slice(0, 5); // 5 Soal Kilat (Soal 1 - 5)
+            } else if (gameState.questionPack === 'paket10a') {
+                selectedSlice = fullLevelPool.slice(5, 15); // 10 Soal Bagian A (Soal 6 - 15)
+            } else {
+                selectedSlice = fullLevelPool.slice(15, 25); // 10 Soal Bagian B (Soal 16 - 25)
+            }
+
+            // Acak urutan soal di dalam paket yang dipilih
+            const pool = [...selectedSlice].sort(() => Math.random() - 0.5);
+
+            gameState.questions = pool;
+            gameState.currentIndex = 0;
+            gameState.score = 0;
+            gameState.savedBottles = 0;
+            gameState.lives = 3;
+            gameState.history = [];
+            gameState.isPaused = false;
+
+            showScreen('screen-game');
+            if (gameState.controlMode === 'motion') {
+                toggleMotionSensor(true);
+            }
+            loadQuestion();
+        }
+
+        function updateHUD() {
+            document.getElementById('hud-score').textContent = formatNumberID(gameState.score);
+            document.getElementById('hud-bottles').textContent = formatNumberID(gameState.savedBottles);
+            document.getElementById('hud-progress').textContent = `${gameState.currentIndex + 1} / ${gameState.questions.length}`;
+            
+            const livesContainer = document.getElementById('hud-lives');
+            let hearts = '';
+            for (let i = 0; i < 3; i++) {
+                hearts += `<span class="text-lg md:text-xl">${i < gameState.lives ? '❤️' : '🖤'}</span>`;
+            }
+            livesContainer.innerHTML = hearts;
+        }
+
+        function loadQuestion() {
+            gameState.isAnswering = false;
+            const q = gameState.questions[gameState.currentIndex];
+            updateHUD();
+
+            document.getElementById('q-category').textContent = q.category;
+            document.getElementById('q-reward-badge').textContent = `+${q.savedBottles} Botol Terselamatkan`;
+            document.getElementById('q-story').textContent = q.story;
+            document.getElementById('q-expression').textContent = q.expression;
+            document.getElementById('bibo-speech').innerHTML = `"Ingat aturan <b>KUKABATAKU</b> ya! Pilih botol tumbler yang tepat!"`;
+
+            // Acak urutan pilihan jawaban
+            const shuffledOptions = [...q.options].sort(() => Math.random() - 0.5);
+            const grid = document.getElementById('tumbler-options-grid');
+            grid.innerHTML = '';
+
+            shuffledOptions.forEach((val, idx) => {
+                const theme = TUMBLER_THEMES[idx];
+                const btn = document.createElement('button');
+                btn.id = `tumbler-btn-${idx}`;
+                btn.dataset.value = val;
+                btn.className = `tumbler-card tumbler-floating-${idx} relative group flex flex-col items-center justify-center p-2 rounded-3xl bg-white/85 hover:bg-white border-2 border-white shadow-lg focus:outline-none`;
+                btn.onclick = () => selectTumblerAnswer(idx, val);
+
+                btn.innerHTML = `
+                    <!-- Indikator Lingkaran Sensor Tangan -->
+                    <div class="absolute top-2 right-2 w-8 h-8 flex items-center justify-center">
+                        <svg class="w-full h-full -rotate-90" viewBox="0 0 36 36">
+                            <circle cx="18" cy="18" r="15" fill="none" stroke="#e2e8f0" stroke-width="3"></circle>
+                            <circle id="sensor-ring-${idx}" class="motion-ring" cx="18" cy="18" r="15" fill="none" stroke="#10b981" stroke-width="4" stroke-dasharray="94.2" stroke-dashoffset="94.2"></circle>
+                        </svg>
+                        <span class="absolute text-xs font-extrabold text-slate-700">${theme.label}</span>
+                    </div>
+
+                    <!-- Ilustrasi SVG Botol Tumbler Warna-Warni -->
+                    <div class="w-28 h-40 md:w-32 md:h-44 relative flex items-center justify-center">
+                        <svg viewBox="0 0 120 175" class="w-full h-full overflow-visible">
+                            <defs>
+                                <linearGradient id="tGrad-${idx}" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="${theme.bodyGrad[0]}"/>
+                                    <stop offset="100%" stop-color="${theme.bodyGrad[1]}"/>
+                                </linearGradient>
+                            </defs>
+
+                            <!-- Efek Percikan Air Segar saat Diklik -->
+                            <g class="water-splash">
+                                <circle cx="40" cy="22" r="5" fill="#38bdf8"/>
+                                <circle cx="60" cy="12" r="7" fill="#0ea5e9"/>
+                                <circle cx="80" cy="22" r="5" fill="#38bdf8"/>
+                                <path d="M50,28 Q60,5 70,28" stroke="#0284c7" stroke-width="3" fill="none"/>
+                            </g>
+
+                            <!-- Tutup Botol Hitam + Tali Gantungan -->
+                            <g class="tumbler-cap">
+                                <path d="M80,22 Q98,22 95,35" stroke="#1e293b" stroke-width="4" fill="none" stroke-linecap="round"/>
+                                <rect x="38" y="14" width="44" height="16" rx="5" fill="#1e293b" stroke="#0f172a" stroke-width="2"/>
+                                <rect x="44" y="8" width="32" height="7" rx="3" fill="#334155"/>
+                            </g>
+
+                            <!-- Leher Tumbler Transparan/Perak -->
+                            <path d="M40,30 L80,30 L86,44 L34,44 Z" fill="#e2e8f0" stroke="#94a3b8" stroke-width="2"/>
+
+                            <!-- Badan Botol Minum Tumbler -->
+                            <rect x="28" y="44" width="64" height="118" rx="16" fill="url(#tGrad-${idx})" stroke="${theme.stroke}" stroke-width="3"/>
+
+                            <!-- Kilau Botol 3D -->
+                            <path d="M36,54 L36,148" stroke="#ffffff" stroke-width="5" stroke-linecap="round" stroke-opacity="0.45"/>
+
+                            <!-- Label Putih Tengah Tempat Angka Jawaban -->
+                            <rect x="31" y="76" width="58" height="52" rx="10" fill="#ffffff" fill-opacity="0.95" stroke="${theme.stroke}" stroke-width="1.5"/>
+                            <text x="60" y="92" font-size="8.5" font-weight="800" fill="#64748b" text-anchor="middle">PILIHAN ${theme.label}</text>
+                            <text x="60" y="116" font-family="Fredoka, sans-serif" font-size="19" font-weight="700" fill="#0f172a" text-anchor="middle">${formatNumberID(val)}</text>
+
+                            <!-- Ikon Daun Adiwiyata di Bawah Botol -->
+                            <text x="60" y="150" font-size="11" font-weight="800" fill="#ffffff" text-anchor="middle">🌿 G-PLAST FREE</text>
+                        </svg>
+                    </div>
+
+                    <span class="${theme.badge} text-white text-xs font-extrabold px-3 py-1 rounded-full mt-1 shadow-sm">
+                        Tumbler ${theme.label}: ${formatNumberID(val)}
+                    </span>
+                `;
+                grid.appendChild(btn);
+            });
+
+            // Reset & Jalankan Timer
+            clearInterval(gameState.timerInterval);
+            gameState.timer = gameState.difficulty === 'easy' ? 45 : (gameState.difficulty === 'medium' ? 50 : 60);
+            document.getElementById('hud-timer').textContent = `${gameState.timer}s`;
+
+            gameState.timerInterval = setInterval(() => {
+                if (gameState.isPaused || gameState.isAnswering) return;
+                gameState.timer--;
+                document.getElementById('hud-timer').textContent = `${gameState.timer}s`;
+                if (gameState.timer <= 0) {
+                    clearInterval(gameState.timerInterval);
+                    handleAnswerEvaluation(null, false, true);
+                }
+            }, 1000);
+        }
+
+        function selectTumblerAnswer(idx, chosenVal) {
+            if (gameState.isAnswering || gameState.isPaused) return;
+            gameState.isAnswering = true;
+            clearInterval(gameState.timerInterval);
+
+            // Animasi tutup botol terbuka & suara clink/percikan air segar
+            const card = document.getElementById(`tumbler-btn-${idx}`);
+            if (card) card.classList.add('cap-open');
+            AudioEngine.playBottleSplash();
+
+            const q = gameState.questions[gameState.currentIndex];
+            const isCorrect = (chosenVal === q.correct);
+
+            setTimeout(() => {
+                handleAnswerEvaluation(chosenVal, isCorrect, false);
+            }, 520);
+        }
+
+        function handleAnswerEvaluation(chosenVal, isCorrect, isTimeout) {
+            const q = gameState.questions[gameState.currentIndex];
+            const modal = document.getElementById('modal-feedback');
+            const icon = document.getElementById('fb-icon');
+            const title = document.getElementById('fb-title');
+            const desc = document.getElementById('fb-desc');
+            const exp = document.getElementById('fb-explanation');
+
+            if (isCorrect) {
+                AudioEngine.playHappyBee();
+                const pointsEarned = 100 + (gameState.timer * 2);
+                gameState.score += pointsEarned;
+                gameState.savedBottles += q.savedBottles;
+
+                icon.textContent = "🎉🐝🧴";
+                title.textContent = "SEGAR SEKALI! JAWABAN BENAR!";
+                title.className = "font-fredoka text-2xl md:text-3xl text-emerald-700";
+                desc.innerHTML = `Kamu mendapatkan <b>+${pointsEarned} Poin Daun 🍃</b> dan menyelamatkan <b>+${q.savedBottles} Botol Plastik</b>!`;
+                document.getElementById('bibo-speech').innerHTML = `"Wah hebat! Hitunganmu tepat, lingkungan sekolah makin bersih!"`;
+            } else {
+                AudioEngine.playWrongBuzz();
+                gameState.lives--;
+
+                icon.textContent = isTimeout ? "⏰🐝" : "💪🐝";
+                title.textContent = isTimeout ? "WAKTU HABIS!" : "YAH, KURANG TEPAT!";
+                title.className = "font-fredoka text-2xl md:text-3xl text-rose-600";
+                desc.innerHTML = `Jawaban yang tepat adalah Tumbler berisi <b>${formatNumberID(q.correct)}</b>. Jangan menyerah ya!`;
+                document.getElementById('bibo-speech').innerHTML = `"Tidak apa-apa, ayo kita pelajari langkah KUKABATAKU-nya!"`;
+            }
+
+            exp.textContent = q.explanation;
+            gameState.history.push({
+                expression: q.expression,
+                chosen: isTimeout ? "Waktu Habis" : formatNumberID(chosenVal),
+                correct: formatNumberID(q.correct),
+                isCorrect: isCorrect,
+                explanation: q.explanation
+            });
+
+            updateHUD();
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function nextQuestion() {
+            AudioEngine.playClick();
+            const modal = document.getElementById('modal-feedback');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+
+            if (gameState.lives <= 0 || gameState.currentIndex + 1 >= gameState.questions.length) {
+                finishGame();
+            } else {
+                gameState.currentIndex++;
+                loadQuestion();
+            }
+        }
+
+        function finishGame() {
+            clearInterval(gameState.timerInterval);
+            showScreen('screen-result');
+
+            const totalAnswered = gameState.history.length;
+            const correctCount = gameState.history.filter(h => h.isCorrect).length;
+            const accuracy = totalAnswered > 0 ? Math.round((correctCount / totalAnswered) * 100) : 0;
+
+            document.getElementById('res-score').textContent = formatNumberID(gameState.score);
+            document.getElementById('res-bottles').textContent = formatNumberID(gameState.savedBottles);
+            document.getElementById('res-accuracy').textContent = `${accuracy}%`;
+
+            const starsEl = document.getElementById('result-stars');
+            const titleEl = document.getElementById('result-title');
+            if (accuracy >= 80) {
+                starsEl.textContent = "⭐ ⭐ ⭐";
+                titleEl.textContent = "AGEN ADIWIYATA TELADAN UTAMA!";
+                AudioEngine.playHappyBee();
+            } else if (accuracy >= 50) {
+                starsEl.textContent = "⭐ ⭐";
+                titleEl.textContent = "KADER ADIWIYATA PENJAGA BUMI!";
+            } else {
+                starsEl.textContent = "⭐";
+                titleEl.textContent = "SAHABAT MUDA BANK SAMPAH BIBO!";
+            }
+
+            const reviewList = document.getElementById('res-review-list');
+            reviewList.innerHTML = gameState.history.map((item, idx) => `
+                <div class="p-3 rounded-xl border ${item.isCorrect ? 'bg-emerald-50 border-emerald-200' : 'bg-rose-50 border-rose-200'}">
+                    <div class="flex items-center justify-between font-extrabold">
+                        <span>Misi ${idx + 1}: ${item.expression}</span>
+                        <span class="${item.isCorrect ? 'text-emerald-700' : 'text-rose-700'}">
+                            ${item.isCorrect ? '✅ Benar' : `❌ Dijawab: ${item.chosen} (Kunci: ${item.correct})`}
+                        </span>
+                    </div>
+                    <p class="text-slate-600 mt-1 font-semibold">${item.explanation}</p>
+                </div>
+            `).join('');
+        }
+
+        /* =========================================================================
+           4. SISTEM SENSOR GERAKAN TANGAN (WEBCAM MOTION TRACKING)
+           Mendeteksi gerakan tangan siswa pada 4 zona kolom (A, B, C, D)
+           ========================================================================= */
+        let motionSensor = {
+            active: false,
+            stream: null,
+            prevFrame: null,
+            zoneProgress: [0, 0, 0, 0],
+            rafId: null
+        };
+
+        async function toggleMotionSensor(forceState) {
+            const hud = document.getElementById('motion-hud');
+            const video = document.getElementById('webcam-video');
+            const targetState = forceState !== undefined ? forceState : !motionSensor.active;
+
+            if (!targetState) {
+                motionSensor.active = false;
+                if (motionSensor.rafId) cancelAnimationFrame(motionSensor.rafId);
+                if (motionSensor.stream) {
+                    motionSensor.stream.getTracks().forEach(t => t.stop());
+                    motionSensor.stream = null;
+                }
+                hud.classList.add('hidden');
+                hud.classList.remove('flex');
+                return;
+            }
+
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: { width: 320, height: 240, facingMode: 'user' },
+                    audio: false
+                });
+                motionSensor.stream = stream;
+                video.srcObject = stream;
+                motionSensor.active = true;
+                motionSensor.prevFrame = null;
+                motionSensor.zoneProgress = [0, 0, 0, 0];
+
+                hud.classList.remove('hidden');
+                hud.classList.add('flex');
+                processMotionFrame();
+            } catch (err) {
+                motionSensor.active = false;
+                const speech = document.getElementById('bibo-speech');
+                if (speech) {
+                    speech.innerHTML = `"Kamera belum diizinkan perangkatmu, gunakan <b>Sentuhan Layar / Klik</b> langsung pada botol ya!"`;
+                }
+            }
+        }
+
+        function processMotionFrame() {
+            if (!motionSensor.active) return;
+
+            const video = document.getElementById('webcam-video');
+            const canvas = document.getElementById('motion-canvas');
+            const ctx = canvas.getContext('2d', { willReadFrequently: true });
+
+            if (video.readyState === video.HAVE_ENOUGH_DATA && !gameState.isAnswering && !gameState.isPaused) {
+                const w = canvas.width;
+                const h = canvas.height;
+
+                // Gambar frame video secara mirror (cermin) agar sesuai posisi tangan siswa
+                ctx.save();
+                ctx.scale(-1, 1);
+                ctx.drawImage(video, -w, 0, w, h);
+                ctx.restore();
+
+                const currentFrame = ctx.getImageData(0, 0, w, h);
+                ctx.clearRect(0, 0, w, h);
+
+                if (motionSensor.prevFrame) {
+                    const zoneScores = [0, 0, 0, 0];
+                    const zoneWidth = w / 4;
+                    const data = currentFrame.data;
+                    const prev = motionSensor.prevFrame.data;
+
+                    for (let y = 0; y < h; y += 2) {
+                        for (let x = 0; x < w; x += 2) {
+                            const i = (y * w + x) * 4;
+                            const diff = Math.abs(data[i] - prev[i]) + Math.abs(data[i + 1] - prev[i + 1]) + Math.abs(data[i + 2] - prev[i + 2]);
+                            if (diff > 95) {
+                                const zIdx = Math.min(3, Math.floor(x / zoneWidth));
+                                zoneScores[zIdx]++;
+                                // Visual titik hijau pada area tangan yang bergerak
+                                ctx.fillStyle = 'rgba(16, 185, 129, 0.75)';
+                                ctx.fillRect(x, y, 2, 2);
+                            }
+                        }
+                    }
+
+                    // Cari zona dengan gerakan tangan paling aktif
+                    let maxZone = -1;
+                    let maxVal = 28; // Ambang batas minimum gerakan tangan
+                    for (let z = 0; z < 4; z++) {
+                        if (zoneScores[z] > maxVal) {
+                            maxVal = zoneScores[z];
+                            maxZone = z;
+                        }
+                    }
+
+                    // Update progress lingkaran pada Botol Tumbler A, B, C, D
+                    for (let z = 0; z < 4; z++) {
+                        const card = document.getElementById(`tumbler-btn-${z}`);
+                        const ring = document.getElementById(`sensor-ring-${z}`);
+                        const overlay = document.getElementById(`zone-overlay-${z}`);
+
+                        if (z === maxZone) {
+                            motionSensor.zoneProgress[z] = Math.min(100, motionSensor.zoneProgress[z] + 4.5);
+                            if (card) card.classList.add('motion-hover');
+                            if (overlay) overlay.classList.add('ring-2', 'ring-white');
+                        } else {
+                            motionSensor.zoneProgress[z] = Math.max(0, motionSensor.zoneProgress[z] - 3.5);
+                            if (card) card.classList.remove('motion-hover');
+                            if (overlay) overlay.classList.remove('ring-2', 'ring-white');
+                        }
+
+                        if (ring) {
+                            const offset = 94.2 - (94.2 * motionSensor.zoneProgress[z]) / 100;
+                            ring.style.strokeDashoffset = offset;
+                        }
+
+                        // Jika lambaian tangan di satu botol mencapai 100%, pilih botol tersebut!
+                        if (motionSensor.zoneProgress[z] >= 100 && card) {
+                            motionSensor.zoneProgress = [0, 0, 0, 0];
+                            const val = Number(card.dataset.value);
+                            selectTumblerAnswer(z, val);
+                            break;
+                        }
+                    }
+                }
+                motionSensor.prevFrame = currentFrame;
+            }
+
+            motionSensor.rafId = requestAnimationFrame(processMotionFrame);
+        }
+
+        /* =========================================================================
+           5. FUNGSI MODAL BANTUAN, PETUNJUK & JEDA
+           ========================================================================= */
+        function openPemdasModal() {
+            gameState.isPaused = true;
+            const m = document.getElementById('modal-pemdas');
+            m.classList.remove('hidden');
+            m.classList.add('flex');
+        }
+        function closePemdasModal() {
+            AudioEngine.playClick();
+            gameState.isPaused = false;
+            const m = document.getElementById('modal-pemdas');
+            m.classList.add('hidden');
+            m.classList.remove('flex');
+        }
+        function openGuideModal() {
+            const m = document.getElementById('modal-guide');
+            m.classList.remove('hidden');
+            m.classList.add('flex');
+        }
+        function closeGuideModal() {
+            AudioEngine.playClick();
+            const m = document.getElementById('modal-guide');
+            m.classList.add('hidden');
+            m.classList.remove('flex');
+        }
+        function togglePauseModal(pauseState) {
+            gameState.isPaused = pauseState;
+            const m = document.getElementById('modal-pause');
+            if (pauseState) {
+                m.classList.remove('hidden');
+                m.classList.add('flex');
+            } else {
+                AudioEngine.playClick();
+                m.classList.add('hidden');
+                m.classList.remove('flex');
+            }
+        }
+
+        window.onload = function () {
+            mountBiboMascots();
+        };
+    </script>
+</body>
+</html>
